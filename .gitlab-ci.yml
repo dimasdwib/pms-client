@@ -22,3 +22,5 @@ deploy_production:
      - ssh-add <(echo "$AWS_SSH_KEY")
      - ssh centos@3.0.122.222 "rm -rf /usr/share/nginx/html/projects/db_pms/client/*"
      - scp -r build/* centos@3.0.122.222:/usr/share/nginx/html/projects/db_pms/client/
+     - scp package.json centos@3.0.122.222:/usr/share/nginx/html/projects/db_pms/client/
+     - ssh centos@3.0.122.222 "cd /usr/share/nginx/html/projects/db_pms/client && yarn"

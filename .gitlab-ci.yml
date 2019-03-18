@@ -5,9 +5,9 @@ stages:
 
 before_script:
   - apt-get update
-
+  - rm -rf node_modules
   # yarn
-  - yarn install
+  - yarn
   - yarn build
 
   # ssh

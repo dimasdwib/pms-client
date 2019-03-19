@@ -14,6 +14,68 @@ export default [
     path: AdminRoute('/dashboard'),
   },
   {
+    label: 'Frontdesk',
+    id: 'frontdesk',
+    icon: 'form',
+    child: [
+      {
+        label: 'Reservation',
+        id: 'reservation',
+        path: AdminRoute('/reservation'),
+      },
+      {
+        label: 'In House',
+        id: 'inhouse',
+        path: AdminRoute('/inhouse'),
+      },
+      {
+        label: 'Activity',
+        id: 'activity',
+        path: AdminRoute('/activity'),
+      },
+    ],
+  },
+  {
+    label: 'Audit',
+    id: 'audit',
+    icon: 'audit',
+    path: AdminRoute('/audit'),
+  },
+  {
+    label: 'Report',
+    id: 'report',
+    icon: 'file-done',
+    path: AdminRoute('/report'),
+  },
+  {
+    label: 'House Keeping',
+    id: 'housekeeping',
+    icon: 'rest',
+    path: AdminRoute('/housekeeping'),
+  },
+  {
+    label: 'Master Data',
+    id: 'masterdata',
+    icon: 'folder-open',
+    child: [
+      {
+        label: 'Rooms',
+        id: 'rooms',
+        path: AdminRoute('/room'),
+      },
+      {
+        label: 'Rates',
+        id: 'rates',
+        path: AdminRoute('/rate'),
+      },
+      {
+        label: 'Guests',
+        id: 'guests',
+        path: AdminRoute('/guest'),
+      },
+    ],
+  },
+  {
     label: 'Settings',
     id: 'settings',
     icon: 'setting',

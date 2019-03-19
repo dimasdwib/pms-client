@@ -5,6 +5,7 @@ import UserRoutes from './User/UserRoutes';
 import PermissionRoutes from './Permission/PermissionRoutes';
 import DashboardRoutes from './Dashboard/DashboardRoutes';
 import RoleRoutes from './Role/RoleRoutes';
+import GuestRoutes from './Guest/GuestRoutes';
 
 export default [
   {
@@ -17,6 +18,7 @@ export default [
       ...UserRoutes,
       ...PermissionRoutes,
       ...RoleRoutes,
+      ...GuestRoutes,
     ],
   },
 ]

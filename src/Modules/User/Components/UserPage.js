@@ -105,7 +105,6 @@ class UserPage extends React.Component {
               key={this.state.tableKey}
               resourceUrl={'/users'}
               columns={this.columns}
-              router={this.props.router}
               tableAction={this.tableAction}
             />
           </Col>

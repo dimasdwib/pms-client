@@ -8,7 +8,7 @@ import { AdminUrl } from '../../../Helper/RouteHelper';
 
 const { confirm } = Modal;
 
-class GuestPage extends React.Component {
+class BedPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,28 +19,25 @@ class GuestPage extends React.Component {
 
   columns = [
     {
+      title: 'Code',
+      dataIndex: 'code',
+      key: 'code',
+    }, 
+    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => (
-        <span>{text} .{record.title}</span>
-      ),
-    }, 
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/guest/${record.id}`)}>
+          <Link to={AdminUrl(`/bed/${record.id}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
@@ -51,7 +48,7 @@ class GuestPage extends React.Component {
   ];
 
   deleteBed = (id, resolve, reject) => {
-    axios.delete(`/guest/${id}`)
+    axios.delete(`/bed/${id}`)
     .then(res => {
       resolve();
       this.setState({ tableKey: id});
@@ -71,14 +68,14 @@ class GuestPage extends React.Component {
     });
   }
 
-  confirmDelete = (record, deleteGuest) => {
+  confirmDelete = (record, deleteBed) => {
     confirm({
       title: `Do you want to delete ${record.name}?`,
       okText: 'Yes',
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteGuest(record.id, resolve, reject);
+          deleteBed(record.id, resolve, reject);
         });
       },
       onCancel() {},
@@ -92,7 +89,7 @@ class GuestPage extends React.Component {
           <Col span={24}>
             <ResourceTable
               key={this.state.tableKey}
-              resourceUrl={'/guest'}
+              resourceUrl={'/bed'}
               columns={this.columns}
             />
           </Col>
@@ -102,4 +99,4 @@ class GuestPage extends React.Component {
   }
 }
 
-export default GuestPage;
+export default BedPage;

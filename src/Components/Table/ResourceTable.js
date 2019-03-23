@@ -119,8 +119,8 @@ class ResourceTable extends React.Component {
       this.setState({
         loading: false,
         dataSource: res.data.data,
-        current: res.data.current_page,
-        total: res.data.total,
+        current: res.data.current_page || res.data.meta.current_page,
+        total: res.data.total || res.data.meta.total,
       });
     })
     .catch(err => {

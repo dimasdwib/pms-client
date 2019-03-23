@@ -8,7 +8,7 @@ import { AdminUrl } from '../../../Helper/RouteHelper';
 
 const { confirm } = Modal;
 
-class GuestPage extends React.Component {
+class RoomPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,28 +19,31 @@ class GuestPage extends React.Component {
 
   columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => (
-        <span>{text} .{record.title}</span>
-      ),
+      title: 'Room',
+      dataIndex: 'number',
+      key: 'number',
     }, 
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: 'Room Type',
+      dataIndex: 'room_type',
+      key: 'room_type',
+      render: (roomType) => (
+        <span> { roomType ? roomType.name : null } </span>  
+      )
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'Bed',
+      dataIndex: 'bed',
+      key: 'bed',
+      render: (bed) => (
+        <span> { bed ? bed.name : null } </span>
+      )
     },
     {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/guest/${record.id}`)}>
+          <Link to={AdminUrl(`/room/${record.id}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
@@ -51,7 +54,7 @@ class GuestPage extends React.Component {
   ];
 
   deleteBed = (id, resolve, reject) => {
-    axios.delete(`/guest/${id}`)
+    axios.delete(`/room/${id}`)
     .then(res => {
       resolve();
       this.setState({ tableKey: id});
@@ -71,14 +74,14 @@ class GuestPage extends React.Component {
     });
   }
 
-  confirmDelete = (record, deleteGuest) => {
+  confirmDelete = (record, deleteRoom) => {
     confirm({
-      title: `Do you want to delete ${record.name}?`,
+      title: `Do you want to delete room ${record.number}?`,
       okText: 'Yes',
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteGuest(record.id, resolve, reject);
+          deleteRoom(record.id, resolve, reject);
         });
       },
       onCancel() {},
@@ -92,7 +95,7 @@ class GuestPage extends React.Component {
           <Col span={24}>
             <ResourceTable
               key={this.state.tableKey}
-              resourceUrl={'/guest'}
+              resourceUrl={'/room'}
               columns={this.columns}
             />
           </Col>
@@ -102,4 +105,4 @@ class GuestPage extends React.Component {
   }
 }
 
-export default GuestPage;
+export default RoomPage;

@@ -8,7 +8,7 @@ import { AdminUrl } from '../../../Helper/RouteHelper';
 
 const { confirm } = Modal;
 
-class GuestPage extends React.Component {
+class RatePage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,39 +19,49 @@ class GuestPage extends React.Component {
 
   columns = [
     {
+      title: 'Code',
+      dataIndex: 'code',
+      key: 'code',
+    }, 
+    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => (
-        <span>{text} .{record.title}</span>
-      ),
-    }, 
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'Room Type',
+      dataIndex: 'room_type',
+      key: 'room_type',
+      render: (roomType) => (
+        <span> {roomType ? roomType.name : null} </span>
+      )
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount_nett',
+      key: 'amount_nett',
     },
     {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/guest/${record.id}`)}>
+          <Link to={AdminUrl(`/rate/${record.id}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
-          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteBed)} />
+          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteRate)} />
         </span>
       ),
     }
   ];
 
-  deleteBed = (id, resolve, reject) => {
-    axios.delete(`/guest/${id}`)
+  deleteRate = (id, resolve, reject) => {
+    axios.delete(`/rate/${id}`)
     .then(res => {
       resolve();
       this.setState({ tableKey: id});
@@ -71,14 +81,14 @@ class GuestPage extends React.Component {
     });
   }
 
-  confirmDelete = (record, deleteGuest) => {
+  confirmDelete = (record, deleteRate) => {
     confirm({
       title: `Do you want to delete ${record.name}?`,
       okText: 'Yes',
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteGuest(record.id, resolve, reject);
+          deleteRate(record.id, resolve, reject);
         });
       },
       onCancel() {},
@@ -92,7 +102,7 @@ class GuestPage extends React.Component {
           <Col span={24}>
             <ResourceTable
               key={this.state.tableKey}
-              resourceUrl={'/guest'}
+              resourceUrl={'/rate'}
               columns={this.columns}
             />
           </Col>
@@ -102,4 +112,4 @@ class GuestPage extends React.Component {
   }
 }
 
-export default GuestPage;
+export default RatePage;

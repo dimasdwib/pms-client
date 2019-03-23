@@ -38,6 +38,7 @@ class UserForm extends React.Component {
       searchPermission: '',
       searchRole: '',
       autoExpandParent: true,
+      isLoadingPage: false,
     }
   }
 

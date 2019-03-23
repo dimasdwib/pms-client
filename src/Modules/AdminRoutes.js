@@ -6,6 +6,10 @@ import PermissionRoutes from './Permission/PermissionRoutes';
 import DashboardRoutes from './Dashboard/DashboardRoutes';
 import RoleRoutes from './Role/RoleRoutes';
 import GuestRoutes from './Guest/GuestRoutes';
+import BedRoutes from './Bed/BedRoutes';
+import RoomRoutes from './Room/RoomRoutes';
+import RateRoutes from './Rate/RateRoutes';
+import ReservationRoutes from './Reservation/ReservationRoutes';
 
 export default [
   {
@@ -19,6 +23,10 @@ export default [
       ...PermissionRoutes,
       ...RoleRoutes,
       ...GuestRoutes,
+      ...BedRoutes,
+      ...RoomRoutes,
+      ...RateRoutes,
+      ...ReservationRoutes,
     ],
   },
 ]

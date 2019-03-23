@@ -19,6 +19,8 @@ class AdminLayout extends React.PureComponent {
     this.setState({ collapsed });
   }
 
+  bgColor = '#001529';
+
   render() {
     return (
       <AuthProvider>
@@ -34,14 +36,14 @@ class AdminLayout extends React.PureComponent {
           >
             <SideMenu match={this.props.match} />
           </Sider>
-          <Layout style={{ marginLeft: this.state.collapsed ? 80 : 200 }}>
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%', background: '#fff', padding: '0 16px' }}> Header </Header>
-            <Content style={{ padding: '16px', marginTop: 64 }}>
-              <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+          <Layout style={{ marginLeft: this.state.collapsed ? 80 : 200, backgroundColor: this.bgColor }}>
+            <Header style={{ position: 'fixed', zIndex: 1, width: '100%', background: this.bgColor, padding: '0 16px', color: 'rgba(255, 255, 255, 0.65)' }}> Header </Header>
+            <Content style={{ padding: '16px', marginTop: 64, background: '#fff', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
+              <div style={{ padding: 24, minHeight: 360 }}>
                 {this.props.children}
               </div>
             </Content>
-            <Footer>Footer</Footer>
+            <Footer style={{ backgroundColor: this.bgColor, color: 'rgba(255, 255, 255, 0.65)' }}>&copy;2019</Footer>
           </Layout>
         </Layout>
       </AuthProvider>

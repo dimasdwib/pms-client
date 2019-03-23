@@ -1,4 +1,4 @@
-import { AdminRoute } from '../../../Helper/RouteHelper';
+import { AdminUrl } from '../../../Helper/RouteHelper';
 import { confirmLogout } from '../../../Helper/AuthHelper';
 
 /**
@@ -11,7 +11,7 @@ export default [
     label: 'Dashboard',
     id: 'dashboard',
     icon: 'dashboard',
-    path: AdminRoute('/dashboard'),
+    path: AdminUrl('/dashboard'),
   },
   {
     label: 'Frontdesk',
@@ -21,17 +21,17 @@ export default [
       {
         label: 'Reservation',
         id: 'reservation',
-        path: AdminRoute('/reservation'),
+        path: AdminUrl('/reservation'),
       },
       {
         label: 'In House',
         id: 'inhouse',
-        path: AdminRoute('/inhouse'),
+        path: AdminUrl('/inhouse'),
       },
       {
         label: 'Activity',
         id: 'activity',
-        path: AdminRoute('/activity'),
+        path: AdminUrl('/activity'),
       },
     ],
   },
@@ -39,19 +39,19 @@ export default [
     label: 'Audit',
     id: 'audit',
     icon: 'audit',
-    path: AdminRoute('/audit'),
+    path: AdminUrl('/audit'),
   },
   {
     label: 'Report',
     id: 'report',
     icon: 'file-done',
-    path: AdminRoute('/report'),
+    path: AdminUrl('/report'),
   },
   {
     label: 'House Keeping',
     id: 'housekeeping',
     icon: 'rest',
-    path: AdminRoute('/housekeeping'),
+    path: AdminUrl('/housekeeping'),
   },
   {
     label: 'Master Data',
@@ -59,19 +59,24 @@ export default [
     icon: 'folder-open',
     child: [
       {
+        label: 'Bed',
+        id: 'beds',
+        path: AdminUrl('/bed'),
+      },
+      {
         label: 'Rooms',
         id: 'rooms',
-        path: AdminRoute('/room'),
+        path: AdminUrl('/room'),
       },
       {
         label: 'Rates',
         id: 'rates',
-        path: AdminRoute('/rate'),
+        path: AdminUrl('/rate'),
       },
       {
         label: 'Guests',
         id: 'guests',
-        path: AdminRoute('/guest'),
+        path: AdminUrl('/guest'),
       },
     ],
   },
@@ -83,12 +88,12 @@ export default [
       {
         label: 'General',
         id: 'general',
-        path: AdminRoute('/general'),
+        path: AdminUrl('/general'),
       },
       {
         label: 'Profile',
         id: 'profile',
-        path: AdminRoute('/profile'),
+        path: AdminUrl('/profile'),
       },
     ],
   },
@@ -100,17 +105,17 @@ export default [
       {
         label: 'User',
         id: 'user',
-        path: AdminRoute('/user'),
+        path: AdminUrl('/user'),
       },
       {
         label: 'Permission',
         id: 'permission',
-        path: AdminRoute('/permission'),
+        path: AdminUrl('/permission'),
       },
       {
         label: 'Role',
         id: 'role',
-        path: AdminRoute('/role'),
+        path: AdminUrl('/role'),
       },  
     ]
   },

@@ -19,6 +19,29 @@ class ReservationPage extends React.Component {
 
   columns = [
     {
+      title: 'Number',
+      key: 'number',
+      dataIndex: 'number',
+    },
+    {
+      title: 'Booker',
+      key: 'booker',
+      dataIndex: 'booker',
+      render: (booker) => (
+        <span>{ booker ? `${booker.name} .${booker.title}` : null }</span>
+      )
+    },
+    {
+      title: 'Status',
+      key: 'status',
+      dataIndex: 'status',
+    },
+    {
+      title: 'Note',
+      key: 'note',
+      dataIndex: 'note',
+    },
+    {
       title: 'Action',
       render: (text, record) => (
         <span>

@@ -37,7 +37,7 @@ class BedPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/bed/${record.id}`)}>
+          <Link to={AdminUrl(`/bed/${record.id_bed}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
@@ -75,7 +75,7 @@ class BedPage extends React.Component {
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteBed(record.id, resolve, reject);
+          deleteBed(record.id_bed, resolve, reject);
         });
       },
       onCancel() {},
@@ -88,6 +88,7 @@ class BedPage extends React.Component {
         <Row>
           <Col span={24}>
             <ResourceTable
+              rowKey="id_bed"
               key={this.state.tableKey}
               resourceUrl={'/bed'}
               columns={this.columns}

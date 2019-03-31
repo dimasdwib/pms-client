@@ -10,7 +10,7 @@ class AdminLayout extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      collapsed: false,
+      collapsed: true,
     };
     this.onCollapse = this.onCollapse.bind(this);
   }

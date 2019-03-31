@@ -28,7 +28,7 @@ class ReservationPage extends React.Component {
       key: 'booker',
       dataIndex: 'booker',
       render: (booker) => (
-        <span>{ booker ? `${booker.name} .${booker.title}` : null }</span>
+        <span>{ booker ? booker.name : null }</span>
       )
     },
     {
@@ -45,7 +45,7 @@ class ReservationPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/reservation/${record.id}`)}>
+          <Link to={AdminUrl(`/reservation/${record.id_reservation}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
@@ -83,12 +83,20 @@ class ReservationPage extends React.Component {
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteReservation(record.id, resolve, reject);
+          deleteReservation(record.id_reservation, resolve, reject);
         });
       },
       onCancel() {},
     });
   }
+
+  tableAction = [
+    {
+      label: 'Create',
+      icon: 'plus',
+      linkTo: AdminUrl('/reservation/create'),
+    }
+  ];
 
   render() {
     return (
@@ -96,6 +104,8 @@ class ReservationPage extends React.Component {
         <Row>
           <Col span={24}>
             <ResourceTable
+              rowKey="id_reservation"
+              tableAction={this.tableAction}
               key={this.state.tableKey}
               resourceUrl={'/reservation'}
               columns={this.columns}

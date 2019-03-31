@@ -43,17 +43,17 @@ class RoomPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/room/${record.id}`)}>
+          <Link to={AdminUrl(`/room/${record.id_room}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
-          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteBed)} />
+          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteRoom)} />
         </span>
       ),
     }
   ];
 
-  deleteBed = (id, resolve, reject) => {
+  deleteRoom = (id, resolve, reject) => {
     axios.delete(`/room/${id}`)
     .then(res => {
       resolve();
@@ -81,7 +81,7 @@ class RoomPage extends React.Component {
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteRoom(record.id, resolve, reject);
+          deleteRoom(record.id_room, resolve, reject);
         });
       },
       onCancel() {},
@@ -94,6 +94,7 @@ class RoomPage extends React.Component {
         <Row>
           <Col span={24}>
             <ResourceTable
+              rowKey="id_room"
               key={this.state.tableKey}
               resourceUrl={'/room'}
               columns={this.columns}

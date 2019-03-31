@@ -8,7 +8,7 @@ before_script:
   - rm -rf node_modules
   # yarn
   - yarn
-  - CI=false yarn build
+  - CI=false RAZZLE_ENDPOINT=https://server-pms.dwdev.site/api yarn build
 
   # ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
@@ -18,6 +18,8 @@ before_script:
 
 deploy_production:
    stage: production
+   only:
+     - master
    script:
      - ssh-add <(echo "$AWS_SSH_KEY")
      - ssh centos@3.0.122.222 "rm -rf /usr/share/nginx/html/projects/db_pms/client/*"

@@ -2,11 +2,6 @@ import React from 'react'; // eslint-disable-line no-unused-vars
 import { Route, Switch } from 'react-router-dom';
 import NotFound from '../Components/Layout/NotFound';
 
-export function AdminRoute(route) {
-  const prefix = '/administrator';
-  return `${prefix}${route}`;
-}
-
 export function AdminUrl(route) {
   const prefix = '/administrator';
   return `${prefix}${route}`;

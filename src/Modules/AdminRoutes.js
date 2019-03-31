@@ -1,5 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import { AdminRoute } from '../Helper/RouteHelper';
+import { AdminUrl } from '../Helper/RouteHelper';
 import AdminLayout from '../Components/Layout/Admin/AdminLayout';
 import UserRoutes from './User/UserRoutes';
 import PermissionRoutes from './Permission/PermissionRoutes';
@@ -13,7 +13,7 @@ import ReservationRoutes from './Reservation/ReservationRoutes';
 
 export default [
   {
-    path: AdminRoute(''),
+    path: AdminUrl(''),
     component: (props) => {
       return (<AdminLayout match={props.match}> {props.child} </AdminLayout>)
     },

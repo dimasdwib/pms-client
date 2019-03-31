@@ -50,7 +50,7 @@ class RatePage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/rate/${record.id}`)}>
+          <Link to={AdminUrl(`/rate/${record.id_rate}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
@@ -88,7 +88,7 @@ class RatePage extends React.Component {
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteRate(record.id, resolve, reject);
+          deleteRate(record.id_rate, resolve, reject);
         });
       },
       onCancel() {},
@@ -101,6 +101,7 @@ class RatePage extends React.Component {
         <Row>
           <Col span={24}>
             <ResourceTable
+              rowKey="id_rate"
               key={this.state.tableKey}
               resourceUrl={'/rate'}
               columns={this.columns}

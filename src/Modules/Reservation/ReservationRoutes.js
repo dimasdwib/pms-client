@@ -7,6 +7,16 @@ const ReservationPage = Loadable({
   loading: PageLoader,
 });
 
+const ReservationForm = Loadable({
+  loader: () => import('./Components/Form/ReservationForm'),
+  loading: PageLoader,
+});
+
+const ReservationDetail = Loadable({
+  loader: () => import('./Components/ReservationDetail'),
+  loading: PageLoader,
+});
+
 export default [
   {
     path: '/reservation',
@@ -14,6 +24,14 @@ export default [
       {
         path: '/',
         component: () => (<ReservationPage />)
+      },
+      {
+        path: '/create',
+        component: () => (<ReservationForm />)
+      },
+      {
+        path: '/:id',
+        component: (route) => (<ReservationDetail key={route.match.params.id} id={route.match.params.id} />)
       },
     ],
   }

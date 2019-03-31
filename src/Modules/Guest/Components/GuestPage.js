@@ -40,17 +40,17 @@ class GuestPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/guest/${record.id}`)}>
+          <Link to={AdminUrl(`/guest/${record.id_guest}`)}>
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
-          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteBed)} />
+          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteGuest)} />
         </span>
       ),
     }
   ];
 
-  deleteBed = (id, resolve, reject) => {
+  deleteGuest = (id, resolve, reject) => {
     axios.delete(`/guest/${id}`)
     .then(res => {
       resolve();
@@ -78,7 +78,7 @@ class GuestPage extends React.Component {
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteGuest(record.id, resolve, reject);
+          deleteGuest(record.id_guest, resolve, reject);
         });
       },
       onCancel() {},
@@ -91,6 +91,7 @@ class GuestPage extends React.Component {
         <Row>
           <Col span={24}>
             <ResourceTable
+              rowKey="id_guest"
               key={this.state.tableKey}
               resourceUrl={'/guest'}
               columns={this.columns}

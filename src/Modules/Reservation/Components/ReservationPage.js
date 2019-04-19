@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
+import { ReservationStatus } from '../../../Components/Label/Label';
 import { AdminUrl } from '../../../Helper/RouteHelper';
 
 const { confirm } = Modal;
@@ -32,9 +33,20 @@ class ReservationPage extends React.Component {
       )
     },
     {
+      title: 'Checked-In',
+      key: 'total_room',
+      dataIndex: 'total_room',
+      render: (total_room, record) => (
+        <span> { record.total_checkin } of { total_room } </span>
+      )
+    },
+    {
       title: 'Status',
       key: 'status',
       dataIndex: 'status',
+      render: (status) => (
+        <ReservationStatus status={status} />
+      )
     },
     {
       title: 'Note',
@@ -100,7 +112,7 @@ class ReservationPage extends React.Component {
 
   render() {
     return (
-      <BasePage>
+      <BasePage pageTitle="Reservation">
         <Row>
           <Col span={24}>
             <ResourceTable

@@ -2,19 +2,18 @@ import React from 'react'; // eslint-disable-line no-unused-vars
 import Loadable from 'react-loadable';
 import PageLoader from '../../Components/Layout/Admin/PageLoader';
 
-const DashboardPage = Loadable({
-  loader: () => import('./Components/DashboardPage'),
+const AuditPage = Loadable({
+  loader: () => import('./Components/AuditPage'),
   loading: PageLoader,
 });
 
-
 export default [
   {
-    path: '/dashboard',
+    path: '/audit',
     child: [
       {
         path: '/',
-        component: () => <DashboardPage />
+        component: () => (<AuditPage />)
       },
     ],
   }

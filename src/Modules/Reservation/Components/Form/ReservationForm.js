@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 import qs from 'qs';
+import { size } from 'lodash';
 import BasePage from '../../../../Components/Layout/Admin/BasePage';
 import RoomForm from './RoomForm';
 import PaymentForm from './PaymentForm';
@@ -54,26 +55,42 @@ class ReservationForm extends React.Component {
   }
 
   handleArrival = (date, dateString) => {
+    const { dateDeparture } = this.state;
+    const night = dateDeparture.diff(date, 'd');
     this.setState({
       dateArrival: date,
+      night,
     });
   }
 
   handleDeparture = (date, dateString) => {
+    const { dateArrival } = this.state;
+    const night = date.diff(dateArrival, 'd');    
     this.setState({
       dateDeparture: date,
+      night,
     });
   }
 
   handleAddRoom = (room) => {
-    const { rooms } = this.state;
+    const { rooms, booker } = this.state;
     const index = rooms.findIndex((r) => r.id_room === room.id_room);
-    console.log(index, rooms, room);
+    
+    if (size(booker) > 0) {
+      room.guests = [
+        {
+          id_guest: booker.id_guest,
+          name: booker.name,
+        }
+      ];
+    }
+
     if (index > -1) {
       rooms[index] = room;
     } else {
       rooms.push(room);
     }
+
     this.setState({
       rooms,
       openModalAddRoom: false,
@@ -90,31 +107,56 @@ class ReservationForm extends React.Component {
   }
 
   handleAddPayment = (payment) => {
-    this.setState({
+    const { payments } = this.state;
+    const index = payments.findIndex((r) => r.id_payment === payment.id_payment);
+    if (index === -1) {
+      payments.push(payment);
+    } else {
+      payments[index].amount += payment.amount;
+    }
 
+    console.log(payments);
+    this.setState({
+      payments,
+      openModalAddPayment: false,
     });
   }
 
   handleRemovePayment = (id_payment) => {
     const { payments } = this.state;
     const index = payments.findIndex((r) => r.id_payment === id_payment);
+    console.log(index, id_payment);
     if (index > -1) {
       payments.splice(index, 1);
       this.setState({ payments });
+
+      console.log(payments);
     }
   }
 
   handleAddBooker = (booker) => {
-    console.log(booker);
+    const { rooms } = this.state;
+    
+    if (rooms.length > 0) {
+      rooms.forEach(r => {
+        r.guests = [booker];
+      });
+      this.setState({ rooms });
+    }
+
     this.setState({
       booker,
       openModalBooker: false,
     });
+    
   }
 
   handleNight = (e) => {
+    const { dateArrival } = this.state;
+    const dateDeparture = moment(dateArrival).add(e.target.value, 'd');
     this.setState({
       night: e.target.value,
+      dateDeparture,
     });
   }
 
@@ -134,7 +176,6 @@ class ReservationForm extends React.Component {
       date_departure: dateDeparture.format('YYYY-MM-DD'),
     }
 
-    console.log(data);
     this.setState({ statusSubmit: 'loading' });
     axios.post('/reservation', data)
     .then(res => {
@@ -164,7 +205,7 @@ class ReservationForm extends React.Component {
     const { dateArrival, dateDeparture, night, roomAvailable, note, rooms, payments, booker } = this.state;
   
     return (
-      <BasePage>
+      <BasePage pageTitle="Create Reservation">
         <Row>
           <Col span={10}>
             <Row gutter={8}>
@@ -274,14 +315,21 @@ class ReservationForm extends React.Component {
             </Row>
             : null }
             <Row>
-              <Col>  
+              <Col>
+                { rooms.length > 0 ? 
+                <Button type="dashed" size="small" block onClick={() => this.setState({ openModalAddRoom: true })}>
+                  Add More Room 
+                </Button>
+                :
                 <Button type="dashed" block size="large" onClick={() => this.setState({ openModalAddRoom: true })}>
                   Add Room 
                 </Button>
+                }
               </Col>
               <Modal
                 width='80%'
                 title="Add Room"
+                centered
                 visible={this.state.openModalAddRoom}
                 maskClosable={false}
                 onCancel={() => this.setState({ openModalAddRoom: false })}
@@ -311,13 +359,13 @@ class ReservationForm extends React.Component {
                           <a><Icon type="edit" /> Edit</a>
                         </Menu.Item>
                         <Menu.Item>
-                          <a><Icon type="delete" onClick={() => this.handleRemovePayment(payment.id_payment)} /> Remove</a>
+                          <a onClick={() => this.handleRemovePayment(payment.id_payment)}><Icon type="delete" /> Remove</a>
                         </Menu.Item>
                       </Menu>
                     );
                     return (
-                      <List.Item actions={[ <Dropdown overlay={menu}><Button icon="more" shape="circle"></Button></Dropdown> ]}>
-                        <List.Item.Meta 
+                      <List.Item key={payment.id_payment} actions={[ <Dropdown overlay={menu}><Button icon="more" shape="circle"></Button></Dropdown> ]}>
+                        <List.Item.Meta
                           title={`${payment.name}`}
                         />
                         <div> 
@@ -334,9 +382,15 @@ class ReservationForm extends React.Component {
             
             <Row>
               <Col>
+                { payments.length > 0 ?
+                <Button type="dashed" size="small" block onClick={() => this.setState({ openModalAddPayment: true })}>
+                  Add More Payment 
+                </Button>
+                :
                 <Button type="dashed" block size="large" onClick={() => this.setState({ openModalAddPayment: true })}>
                   Add Payment 
                 </Button>
+                }
               </Col>
               <Modal
                 title="Add Payment"
@@ -345,7 +399,7 @@ class ReservationForm extends React.Component {
                 onCancel={() => this.setState({ openModalAddPayment: false })}
                 footer={null}
               >
-                <PaymentForm />
+                <PaymentForm onAddPayment={this.handleAddPayment} />
               </Modal>
             </Row>
             

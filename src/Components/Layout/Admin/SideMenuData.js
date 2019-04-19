@@ -26,7 +26,7 @@ export default [
       {
         label: 'In House',
         id: 'inhouse',
-        path: AdminUrl('/inhouse'),
+        path: AdminUrl('/reservation/inhouse'),
       },
       {
         label: 'Activity',

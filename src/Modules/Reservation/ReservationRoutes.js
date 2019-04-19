@@ -17,6 +17,11 @@ const ReservationDetail = Loadable({
   loading: PageLoader,
 });
 
+const InHouseList = Loadable({
+  loader: () => import('./Components/InHouseList'),
+  loading: PageLoader,
+});
+
 export default [
   {
     path: '/reservation',
@@ -24,6 +29,10 @@ export default [
       {
         path: '/',
         component: () => (<ReservationPage />)
+      },
+      {
+        path: '/inhouse',
+        component: () => (<InHouseList />)
       },
       {
         path: '/create',

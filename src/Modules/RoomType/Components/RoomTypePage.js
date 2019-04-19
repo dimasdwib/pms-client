@@ -6,7 +6,7 @@ class RoomTypePage extends React.Component {
 
   render() {
     return (
-      <BasePage>
+      <BasePage pageTitle="Room Type">
         <Row>
           <Col>
             Room Type    

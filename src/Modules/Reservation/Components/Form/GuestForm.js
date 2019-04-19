@@ -1,17 +1,40 @@
 import React from 'react';
-import { Row, Col, Form, Button, notification, Spin, Tabs } from 'antd';
+import { Row, Col, Form, Button, notification, Spin,
+  Tabs, Select, Input, Table, Empty } from 'antd';
 import TextField from '../../../../Components/Form/TextField';
 import axios from 'axios';
 
 class GuestForm extends React.PureComponent {
 
+  columns = [{
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+  }, {
+    title: 'Email',
+    dataIndex: 'email',
+    key: 'email',
+  }, {
+    title: 'Id Card',
+    dataIndex: 'idcard',
+    key: 'idcard',
+  }, {
+    title: 'Phone',
+    dataIndex: 'phone',
+    key: 'phone',
+  }];
+
+  fetchGuestTimeout = null;
+
   constructor(props) {
     super(props);
 
     this.state = {
+      search: '',
+      activeKey: 'find',
       statusSubmit: null,
       name: '',
-      title: '',
+      title: 'mr',
       email: '',
       phone: '',
       idcard: '',
@@ -20,12 +43,43 @@ class GuestForm extends React.PureComponent {
       id_country: '',
       id_state: '',
       id_city: '',
+      guestData: [],
+      selectedGuest: {},
     }
   }
 
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
+    });
+  }
+
+  handleTitle = (title) => {
+    this.setState({ title });
+  }
+
+  handleSearch = (e) => {
+    if (e.target.value !== '') {
+      if (this.fetchGuestTimeout !== null) {
+        window.clearTimeout(this.fetchGuestTimeout);
+      }
+      this.fetchGuestTimeout = window.setTimeout(() => {
+        this.fetchGuest();
+      }, 400);
+    }
+
+    this.setState({ search: e.target.value });
+  }
+
+  fetchGuest = () => {
+    const { search } = this.state;
+    this.setState({ isLoadingSearch: true });
+    axios.get(`/guest/all?search=${search}`)
+    .then(res => {
+      this.setState({ 
+        guestData: res.data,
+        isLoadingSearch: false,
+      })
     });
   }
 
@@ -64,13 +118,49 @@ class GuestForm extends React.PureComponent {
     });
   }
 
+  handleSelect = () => {
+    const { selectedGuest } = this.state;
+    if (this.props.onAddGuest) {
+      console.log(selectedGuest);
+      this.props.onAddGuest(selectedGuest);
+    }
+  }
+
   render() {
-    const { name, idcard, phone, address, zipcode, email } = this.state;
+    const { name, idcard, phone, address, zipcode, email, title, search, guestData, isLoadingSearch, activeKey } = this.state;
     return (
       <Spin spinning={this.state.statusSubmit === 'loading'}>
-        <Tabs defaultActiveKey="create">
+        <Tabs activeKey={activeKey} onChange={(activeKey) => this.setState({ activeKey })}>
           <Tabs.TabPane tab="Find" key='find'>
-            Search
+            <Form>
+              <Form.Item>
+                <Input.Search
+                  name="search"
+                  onChange={this.handleSearch}
+                  value={search}
+                  placeholder="Search by name, id, email, phone, etc"
+                />
+              </Form.Item>
+              <Form.Item>
+                <Table
+                  dataSource={guestData}
+                  columns={this.columns}
+                  loading={isLoadingSearch}
+                  rowSelection={{ 
+                    type: "radio",
+                    onSelect: (guest) => this.setState({ selectedGuest: guest })
+                  }}
+                  pagination={false}
+                  size="small"
+                  locale={{
+                    emptyText: <Empty> <Button type="primary" onClick={() => this.setState({ activeKey: 'create' })}>Create New</Button> </Empty>
+                  }}
+                />
+              </Form.Item>
+              <Button type="primary" onClick={this.handleSelect}>
+                Select
+              </Button>
+            </Form>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Create new" key='create'>
             <Row>
@@ -85,10 +175,19 @@ class GuestForm extends React.PureComponent {
                         onChange={this.handleChange}
                         value={name}
                       />
-                      <TextField 
+                      <Form.Item
                         label="Title"
-                        placeholder="Title"
-                      />
+                      >
+                        <Select
+                          placeholder="Title"
+                          value={title}
+                          onChange={this.handleTitle}
+                        >
+                          <Select.Option value="mr"> mr </Select.Option>
+                          <Select.Option value="mrs"> mrs </Select.Option>
+                          <Select.Option value="ms"> ms </Select.Option>
+                        </Select>
+                      </Form.Item>
                     </Form>
                   </Col>
                 </Row>

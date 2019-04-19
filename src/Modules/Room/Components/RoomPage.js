@@ -5,6 +5,7 @@ import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
+import { RoomFoStatus, RoomHkStatus } from '../../../Components/Label/Label';
 
 const { confirm } = Modal;
 
@@ -37,6 +38,14 @@ class RoomPage extends React.Component {
       key: 'bed',
       render: (bed) => (
         <span> { bed ? bed.name : null } </span>
+      )
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (fo_status, record) => (
+        <span> <RoomFoStatus status={record.fo_status} /> <RoomHkStatus status={record.hk_status} /> </span>
       )
     },
     {
@@ -90,7 +99,7 @@ class RoomPage extends React.Component {
 
   render() {
     return (
-      <BasePage>
+      <BasePage pageTitle="Room">
         <Row>
           <Col span={24}>
             <ResourceTable

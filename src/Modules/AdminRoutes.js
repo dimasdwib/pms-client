@@ -10,6 +10,9 @@ import BedRoutes from './Bed/BedRoutes';
 import RoomRoutes from './Room/RoomRoutes';
 import RateRoutes from './Rate/RateRoutes';
 import ReservationRoutes from './Reservation/ReservationRoutes';
+import HouseKeepingRoutes from './HouseKeeping/HouseKeepingRoutes';
+import ReportRoutes from './Report/ReportRoutes';
+import AuditRoutes from './Audit/AuditRoutes';
 
 export default [
   {
@@ -27,6 +30,9 @@ export default [
       ...RoomRoutes,
       ...RateRoutes,
       ...ReservationRoutes,
+      ...HouseKeepingRoutes,
+      ...ReportRoutes,
+      ...AuditRoutes,
     ],
   },
 ]

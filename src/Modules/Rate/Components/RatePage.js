@@ -97,7 +97,7 @@ class RatePage extends React.Component {
 
   render() {
     return (
-      <BasePage>
+      <BasePage pageTitle="Rate">
         <Row>
           <Col span={24}>
             <ResourceTable

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Row, Col, Select, Form, Button } from 'antd';
+import { Row, Col, Select, Form, Button, Divider } from 'antd';
 import { IconArrival, IconDeparture } from '../../../../Components/Icon/Reservation';
+import RoomCard from '../../../../Components/Card/RoomCard';
 
 class RoomForm extends React.PureComponent {
 
@@ -20,6 +21,10 @@ class RoomForm extends React.PureComponent {
     const bed = roomAvailable.beds.find((r) => r.id_bed === idBed);
     const room = roomAvailable.rooms.find((r) => r.id_room === idRoom);
     const rate = roomAvailable.rates.find((r) => r.id_rate === idRate);
+
+    if (!room || !rate) {
+      return;
+    }
 
     const data = {
       ...room,
@@ -58,6 +63,14 @@ class RoomForm extends React.PureComponent {
   handleRoom = (value) => {
     this.setState({ 
       idRoom: value,
+    });
+  }
+
+  handleClickRoom = (e) => {
+    this.setState({
+      idRoom: e.idRoom,
+      idBed: e.idBed,
+      idRoomType: e.idRoomType
     });
   }
 
@@ -131,7 +144,7 @@ class RoomForm extends React.PureComponent {
                 onChange={this.handleRoom}
               >
                 { 
-                  roomAvailable.rooms.filter(room => room.id_room_type === idRoomType && room.id_bed === idBed)
+                  roomAvailable.rooms.filter(room => room.room_type.id_room_type === idRoomType && room.bed.id_bed === idBed)
                   .map(room => (
                     <Select.Option key={room.id_room} value={room.id_room}> { room.number } </Select.Option>
                   ))
@@ -159,6 +172,28 @@ class RoomForm extends React.PureComponent {
             </Form.Item>
           </Col>
         </Row>
+
+        <Row>
+          <Col>
+            <div style={{ display: 'inline-block' }}>
+              {
+                roomAvailable.rooms // .filter(room => room.room_type.id_room_type === idRoomType && room.bed.id_bed === idBed)
+                .map(room => (
+                  <RoomCard
+                    key={room.id_room}
+                    id={room.id_room}
+                    number={room.number}
+                    bed={room.bed}
+                    selected={room.id_room === this.state.idRoom}
+                    roomType={room.room_type}
+                    onClick={this.handleClickRoom}
+                  />
+                ))
+              }
+            </div>
+          </Col>
+        </Row>
+        <Divider />
         <Button type="primary" onClick={this.handleAddRoom}>
           Add Room
         </Button>

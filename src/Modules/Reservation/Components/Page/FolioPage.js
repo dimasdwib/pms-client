@@ -3,6 +3,7 @@ import { Row, Col, Table, Divider, Typography,
   Card, Button, Modal } from 'antd';
 import FolioPaymentForm from '../Form/FolioPaymentForm';
 import { Currency } from '../../../../Helper/Currency';
+import { DateTimeFormat } from '../../../../Helper/DateTime';
 
 const { Title } = Typography;
 
@@ -19,6 +20,7 @@ class RoomPage extends React.Component {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
+    render: (date) => (DateTimeFormat(date))
   }, {
     title: 'Description',
     dataIndex: 'description',
@@ -28,7 +30,7 @@ class RoomPage extends React.Component {
     dataIndex: 'amount_nett',
     key: 'amount_nett',
     render: (value, record) => {
-      return <h3 style={{ fontWeight: 600, color: record.type === 'db' ? 'red' : 'green' }}> { Currency(value) } </h3>
+      return <h4 style={{ fontWeight: 600, color: record.type === 'db' ? 'red' : 'green' }}> { Currency(value) } </h4>
     } 
   }];
 

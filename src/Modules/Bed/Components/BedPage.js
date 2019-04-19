@@ -84,7 +84,7 @@ class BedPage extends React.Component {
 
   render() {
     return (
-      <BasePage>
+      <BasePage pageTitle="Bed">
         <Row>
           <Col span={24}>
             <ResourceTable

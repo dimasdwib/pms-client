@@ -2,18 +2,18 @@ import React from 'react'; // eslint-disable-line no-unused-vars
 import Loadable from 'react-loadable';
 import PageLoader from '../../Components/Layout/Admin/PageLoader';
 
-const ReportPage = Loadable({
-  loader: () => import('./Components/ReportPage'),
+const SettingPage = Loadable({
+  loader: () => import('./Components/SettingPage'),
   loading: PageLoader,
 });
 
 export default [
   {
-    path: '/report',
+    path: '/setting',
     child: [
       {
-        path: '/:id',
-        component: (route) => (<ReportPage id={route.match.params.id} />)
+        path: '/',
+        component: () => (<SettingPage />)
       },
     ],
   }

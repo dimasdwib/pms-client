@@ -65,7 +65,7 @@ class ReservationDetail extends React.Component {
     const { reservation, statusReservation, page, id } = this.state;
 
     return(
-      <BasePage pageTitle={`Reservation ${reservation.number || ''}`}>
+      <BasePage pageTitle={`Reservation ${reservation.number || ''}`} permission="view-reservation">
         <Spin spinning={statusReservation === 'loading'}>
           <Row gutter={16}>
             <Col span={4}>
@@ -109,6 +109,12 @@ class ReservationDetail extends React.Component {
                 renderItem={item => (
                   <List.Item>
                     <Link to={AdminUrl(`/reservation/${this.props.id}?page=folio&id=${item.id_bill}`)}> {item.number} </Link>
+                    &nbsp; &nbsp;
+                    { item.status === 'closed' ? 
+                      <Tag color="red"> { item.status } </Tag>
+                      :
+                      <Tag color="green"> { item.status } </Tag>
+                    }
                   </List.Item>
                 )}
               />

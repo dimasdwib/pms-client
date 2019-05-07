@@ -1,10 +1,12 @@
 import React from 'react';
+import { Button, notification } from 'antd';
+import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { RoomFoStatus, RoomHkStatus } from '../../../Components/Label/Label';
 
 class HouseKeppingPage extends React.Component {
-  
+
   columns = [
     {
       title: 'Room',
@@ -39,7 +41,7 @@ class HouseKeppingPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-
+          { record.hk_status === 'dirty' ? <Button icon="sync" type="primary" onClick={() => this.cleanRoom(record.id_room)}> Clean </Button> : null }
         </span>
       ),
     }
@@ -52,9 +54,23 @@ class HouseKeppingPage extends React.Component {
     };
   }
 
+  cleanRoom = (idRoom) => {
+    axios.put(`/housekeeping/clean/${idRoom}`)
+    .then(res => {
+      notification.success({
+        message: 'Success',
+        description: res.data.message,
+      });
+      this.setState({ tableKey: this.state.tableKey + 1 });
+    })
+    .catch(err => {
+
+    });
+  }
+
   render() {
     return (
-      <BasePage pageTitle="House Keeping">
+      <BasePage pageTitle="House Keeping" permission="view-room-status">
         <ResourceTable
           rowKey="id_room"
           key={this.state.tableKey}

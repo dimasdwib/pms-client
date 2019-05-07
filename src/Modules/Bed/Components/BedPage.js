@@ -5,6 +5,7 @@ import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
+import BedForm from './BedForm';
 
 const { confirm } = Modal;
 
@@ -14,6 +15,7 @@ class BedPage extends React.Component {
     super(props);
     this.state = {
       tableKey: 0, // init table key
+      editBed: null,
     };
   }
 
@@ -37,9 +39,7 @@ class BedPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/bed/${record.id_bed}`)}>
-            <Button icon="edit" type="primary" />
-          </Link>
+          <Button icon="edit" type="primary" onClick={() => this.setState({ openBedForm: true, editBed: record.id_bed })} />
           &nbsp;
           <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteBed)} />
         </span>
@@ -82,9 +82,39 @@ class BedPage extends React.Component {
     });
   }
 
+  onSuccess = (res) => {
+    console.log(res);
+    this.setState({ openBedForm: false, tableKey: this.state.tableKey + 1 });
+    notification.success({
+      message: 'success',
+      description: res.data.message,
+    });
+  }
+
+  tableAction = [
+    {
+      label: 'Create',
+      icon: 'plus',
+      onClick: () => this.setState({ openBedForm: true, editBed: null }),
+    }
+  ];
+
   render() {
     return (
       <BasePage pageTitle="Bed">
+        <Modal
+          title="Bed"
+          centered
+          visible={this.state.openBedForm}
+          maskClosable={false}
+          onCancel={() => this.setState({ openBedForm: false })}
+          footer={null}
+        >
+          <BedForm
+            id={this.state.editBed}
+            onSuccess={this.onSuccess}
+          />
+        </Modal>
         <Row>
           <Col span={24}>
             <ResourceTable
@@ -92,6 +122,7 @@ class BedPage extends React.Component {
               key={this.state.tableKey}
               resourceUrl={'/bed'}
               columns={this.columns}
+              tableAction={this.tableAction}
             />
           </Col>
         </Row>

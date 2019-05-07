@@ -107,12 +107,13 @@ class ReservationPage extends React.Component {
       label: 'Create',
       icon: 'plus',
       linkTo: AdminUrl('/reservation/create'),
+      permission: 'create-reservation'
     }
   ];
 
   render() {
     return (
-      <BasePage pageTitle="Reservation">
+      <BasePage pageTitle="Reservation" permission="view-reservation">
         <Row>
           <Col span={24}>
             <ResourceTable

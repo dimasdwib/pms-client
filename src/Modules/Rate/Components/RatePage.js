@@ -5,6 +5,7 @@ import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
+import { Currency } from '../../../Helper/Currency';
 
 const { confirm } = Modal;
 
@@ -45,6 +46,7 @@ class RatePage extends React.Component {
       title: 'Amount',
       dataIndex: 'amount_nett',
       key: 'amount_nett',
+      render: (amount) => (Currency(amount)),
     },
     {
       title: 'Action',
@@ -95,6 +97,14 @@ class RatePage extends React.Component {
     });
   }
 
+  tableAction = [
+    {
+      label: 'Create',
+      icon: 'plus',
+      linkTo: AdminUrl('/rate/create'),
+    }
+  ];
+
   render() {
     return (
       <BasePage pageTitle="Rate">
@@ -105,6 +115,7 @@ class RatePage extends React.Component {
               key={this.state.tableKey}
               resourceUrl={'/rate'}
               columns={this.columns}
+              tableAction={this.tableAction}
             />
           </Col>
         </Row>

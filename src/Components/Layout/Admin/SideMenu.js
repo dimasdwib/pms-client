@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Menu  } from 'antd';
 import SideMenuData from './SideMenuData';
+import { ProtectComponent } from '../../../Helper/AuthHelper'; 
 
 const { SubMenu } = Menu;
 class SideMenu extends React.Component {

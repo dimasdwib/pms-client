@@ -6,6 +6,7 @@ import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { ReservationStatus } from '../../../Components/Label/Label';
 import { AdminUrl } from '../../../Helper/RouteHelper';
+import { DateFormat, DateTimeFormat } from '../../../Helper/DateTime';
 
 const { confirm } = Modal;
 
@@ -20,7 +21,7 @@ class ReservationPage extends React.Component {
 
   columns = [
     {
-      title: 'Number',
+      title: 'Reservation',
       key: 'number',
       dataIndex: 'number',
     },
@@ -44,13 +45,13 @@ class ReservationPage extends React.Component {
       title: 'Date Check In',
       key: 'date_checkin',
       dataIndex: 'date_checkin',
-      render: (date) => (date)
+      render: (date) => (DateTimeFormat(date))
     },
     {
       title: 'Expected Departure',
       key: 'date_departure',
       dataIndex: 'date_departure',
-      render: (date) => (date)
+      render: (date) => (DateFormat(date))
     },
     {
       title: 'Action',
@@ -66,7 +67,7 @@ class ReservationPage extends React.Component {
 
   render() {
     return (
-      <BasePage pageTitle="In House">
+      <BasePage pageTitle="In House" permission="view-guest-in-house">
         <Row>
           <Col span={24}>
             <ResourceTable

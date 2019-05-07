@@ -72,7 +72,15 @@ const columnFolio = [
     dataIndex: 'balance',
     key: 'balance',
     render: (balance) => (
-      Currency(balance)
+      <span style={{ color: balance > 0 ? 'red' : 'green' }}> { Currency(balance) } </span>
+    )
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    render: (status) => (
+      <Tag color={status === 'closed' ? 'red' : 'green'}> { status } </Tag>
     )
   },
 ];

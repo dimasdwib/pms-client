@@ -97,6 +97,14 @@ class RoomPage extends React.Component {
     });
   }
 
+  tableAction = [
+    {
+      label: 'Create',
+      icon: 'plus',
+      linkTo: AdminUrl('/room/create'),
+    }
+  ];
+
   render() {
     return (
       <BasePage pageTitle="Room">
@@ -107,6 +115,7 @@ class RoomPage extends React.Component {
               key={this.state.tableKey}
               resourceUrl={'/room'}
               columns={this.columns}
+              tableAction={this.tableAction}
             />
           </Col>
         </Row>

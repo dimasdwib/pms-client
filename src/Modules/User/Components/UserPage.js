@@ -98,7 +98,7 @@ class UserPage extends React.Component {
 
   render() {
     return (
-      <BasePage permission={'read-users'}>
+      <BasePage permission={'read-users'} pageTitle="Users">
         <Row>
           <Col span={24}>
             <ResourceTable

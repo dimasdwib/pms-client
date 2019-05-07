@@ -13,6 +13,8 @@ import ReservationRoutes from './Reservation/ReservationRoutes';
 import HouseKeepingRoutes from './HouseKeeping/HouseKeepingRoutes';
 import ReportRoutes from './Report/ReportRoutes';
 import AuditRoutes from './Audit/AuditRoutes';
+import SettingRoutes from './Setting/SettingRoutes';
+import RoomTypeRoutes from './RoomType/RoomTypeRoutes';
 
 export default [
   {
@@ -28,11 +30,13 @@ export default [
       ...GuestRoutes,
       ...BedRoutes,
       ...RoomRoutes,
+      ...RoomTypeRoutes,
       ...RateRoutes,
       ...ReservationRoutes,
       ...HouseKeepingRoutes,
       ...ReportRoutes,
       ...AuditRoutes,
+      ...SettingRoutes,
     ],
   },
 ]

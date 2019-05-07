@@ -145,7 +145,7 @@ class RolePage extends React.Component {
     } = this.state;
 
     return (
-      <BasePage>
+      <BasePage pageTitle="Roles">
         <Row gutter={16}>
           <Col span={8}>
             <Button

@@ -28,24 +28,29 @@ export default [
         id: 'inhouse',
         path: AdminUrl('/reservation/inhouse'),
       },
-      {
-        label: 'Activity',
-        id: 'activity',
-        path: AdminUrl('/activity'),
-      },
+      // {
+      //   label: 'Folio',
+      //   id: 'folio',
+      //   path: AdminUrl('/folio'),
+      // },
+      // {
+      //   label: 'Activity',
+      //   id: 'activity',
+      //   path: AdminUrl('/activity'),
+      // },
     ],
   },
-  {
-    label: 'Audit',
-    id: 'audit',
-    icon: 'audit',
-    path: AdminUrl('/audit'),
-  },
+  // {
+  //   label: 'Audit',
+  //   id: 'audit',
+  //   icon: 'audit',
+  //   path: AdminUrl('/audit'),
+  // },
   {
     label: 'Report',
     id: 'report',
     icon: 'file-done',
-    path: AdminUrl('/report'),
+    path: AdminUrl('/report/main'),
   },
   {
     label: 'House Keeping',
@@ -69,6 +74,11 @@ export default [
         path: AdminUrl('/room'),
       },
       {
+        label: 'Room Type',
+        id: 'roomtypes',
+        path: AdminUrl('/roomtype'),
+      },
+      {
         label: 'Rates',
         id: 'rates',
         path: AdminUrl('/rate'),
@@ -80,23 +90,23 @@ export default [
       },
     ],
   },
-  {
-    label: 'Settings',
-    id: 'settings',
-    icon: 'setting',
-    child: [
-      {
-        label: 'General',
-        id: 'general',
-        path: AdminUrl('/general'),
-      },
-      {
-        label: 'Profile',
-        id: 'profile',
-        path: AdminUrl('/profile'),
-      },
-    ],
-  },
+  // {
+  //   label: 'Settings',
+  //   id: 'settings',
+  //   icon: 'setting',
+  //   child: [
+  //     {
+  //       label: 'Setting',
+  //       id: 'setting',
+  //       path: AdminUrl('/setting'),
+  //     },
+  //     {
+  //       label: 'Profile',
+  //       id: 'profile',
+  //       path: AdminUrl('/profile'),
+  //     },
+  //   ],
+  // },
   {
     label: 'Access Control',
     id: 'acl',
@@ -111,6 +121,7 @@ export default [
         label: 'Permission',
         id: 'permission',
         path: AdminUrl('/permission'),
+        permission: 'view-room-status'
       },
       {
         label: 'Role',

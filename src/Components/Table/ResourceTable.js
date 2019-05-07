@@ -221,6 +221,7 @@ class ResourceTable extends React.Component {
             </Form>
           </Col>
         </Row>
+        <br />
         <Row>
           <Col span={24}>
             <Table

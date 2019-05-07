@@ -1,11 +1,13 @@
 import React from 'react';
 import { Row, Col, Table, Divider, Typography, 
-  Card, Button, Modal } from 'antd';
+  Card, Button, Modal, notification, Tag } from 'antd';
+import axios from 'axios';
 import FolioPaymentForm from '../Form/FolioPaymentForm';
 import { Currency } from '../../../../Helper/Currency';
 import { DateTimeFormat } from '../../../../Helper/DateTime';
 
 const { Title } = Typography;
+const { confirm } = Modal;
 
 class RoomPage extends React.Component {
 
@@ -30,7 +32,7 @@ class RoomPage extends React.Component {
     dataIndex: 'amount_nett',
     key: 'amount_nett',
     render: (value, record) => {
-      return <h4 style={{ fontWeight: 600, color: record.type === 'db' ? 'red' : 'green' }}> { Currency(value) } </h4>
+      return <h4 style={{ fontWeight: 600, color: record.pos === 'dr' ? 'red' : 'green' }}> { Currency(value) } </h4>
     } 
   }];
 
@@ -47,16 +49,74 @@ class RoomPage extends React.Component {
     }
   }
 
+  handleCloseFolio = (id, resolve, reject) => {
+    axios.post(`/transaction/close_reservation_bill/${id}`)
+    .then(res => {
+      resolve();
+      this.props.fetchReservation();
+      notification.success({
+        message: 'Success',
+        description: res.data.message,
+      });
+    })
+    .catch(err => {
+      reject();
+      if (err.response) {
+        notification.error({
+          message: 'Error',
+          description: err.response.data.message,
+        });
+      }
+    });
+  }
+
+  confirmCloseFolio = (record, closeFolio) => {
+    if (record.balance === 0) {
+      confirm({
+        title: `Do you want to close folio ${record.number}?`,
+        okText: 'Yes',
+        okType: 'danger',
+        onOk() {
+          return new Promise((resolve, reject) => {
+            closeFolio(record.id_bill, resolve, reject);
+          });
+        },
+        onCancel() {},
+      });
+    } else {
+      Modal.warning({
+        title: 'Please check the balance',
+        content: (
+          <div>
+            <p>Folio balance must be 0 to close the folio</p>
+          </div>
+        ),
+        onOk() {},
+      });
+    }
+  }
+
   render() {
     const { data } = this.props;
     const guest = data.guest || {};
     return (
       <div>
+        
         <Row>
-          <Col>
-            <Button type="primary" shape="round" onClick={() => this.setState({ openModalAddPayment: true })}> Add Payment </Button>
-            &nbsp;&nbsp;
-            {/* <Button type="primary" shape="round"> Add Charges </Button> */}
+          <Col span={12}>
+          { data.status === 'open' ?
+            <div>
+              <Button type="primary" shape="round" onClick={() => this.setState({ openModalAddPayment: true })}> Add Payment </Button>
+              &nbsp;&nbsp;
+              {/* <Button type="primary" shape="round"> Add Charges </Button> */}
+              <Button type="danger" shape="round" onClick={() => this.confirmCloseFolio(data, this.handleCloseFolio)}> Close Folio </Button>
+            </div>
+            :
+            <Tag color="red"> Closed </Tag>
+          }
+          </Col>
+          <Col span={12}>
+            {/* <Button style={{ float: 'right' }} shape="round" type="primary"> Print </Button> */}
           </Col>
         </Row>
         <Divider />

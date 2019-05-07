@@ -89,7 +89,7 @@ class LoginPage extends React.Component {
               </Form.Item>
             </Form>
             <div style={{ display: 'block', textAlign: 'center' }}>
-              <small>react - razzle - antd &copy; 2019</small>
+              <small>Property Management System &copy; 2019</small>
             </div>
           </Col>
         </Row>

@@ -85,6 +85,14 @@ class GuestPage extends React.Component {
     });
   }
 
+  tableAction = [
+    {
+      label: 'Create',
+      icon: 'plus',
+      linkTo: AdminUrl('/guest/create'),
+    }
+  ];
+
   render() {
     return (
       <BasePage pageTitle="Guest">
@@ -95,6 +103,7 @@ class GuestPage extends React.Component {
               key={this.state.tableKey}
               resourceUrl={'/guest'}
               columns={this.columns}
+              tableAction={this.tableAction}
             />
           </Col>
         </Row>

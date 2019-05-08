@@ -23,13 +23,13 @@ class RoomPage extends React.Component {
       title: 'Room',
       dataIndex: 'number',
       key: 'number',
-    }, 
+    },
     {
       title: 'Room Type',
       dataIndex: 'room_type',
       key: 'room_type',
       render: (roomType) => (
-        <span> { roomType ? roomType.name : null } </span>  
+        <span> { roomType ? roomType.name : null } </span>
       )
     },
     {
@@ -97,17 +97,39 @@ class RoomPage extends React.Component {
     });
   }
 
+  onSuccess = (res) => {
+    console.log(res);
+    this.setState({ openRoomForm: false, tableKey: this.state.tableKey + 1 });
+    notification.success({
+      message: 'success',
+      description: res.data.message,
+    });
+  }
+
   tableAction = [
     {
       label: 'Create',
       icon: 'plus',
-      linkTo: AdminUrl('/room/create'),
+      onClick: () => this.setState({ openRoomForm: true, editRoom: null }),
     }
   ];
 
   render() {
     return (
       <BasePage pageTitle="Room">
+        <Modal
+          title="Room"
+          centered
+          visible={this.state.openRoomForm}
+          maskClosable={false}
+          onCancel={() => this.setState({ openRoomForm: false })}
+          footer={null}
+        >
+          <RoomForm
+            id={this.state.editRoom}
+            onSuccess={this.onSuccess}
+          />
+        </Modal>
         <Row>
           <Col span={24}>
             <ResourceTable

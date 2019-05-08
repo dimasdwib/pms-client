@@ -1,9 +1,9 @@
 import React from 'react';
-import { Form, Button, Select } from 'antd';
+import { Form, Button } from 'antd';
 import TextField from '../../../Components/Form/TextField';
 import Axios from 'axios';
 
-class RateForm extends React.Component {
+class RoomTypeForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -11,39 +11,34 @@ class RateForm extends React.Component {
       code: '',
       name: '',
       description: '',
-      amount_nett: '',
-      id_room_type: undefined,
-      roomTypeData: [],
+      max_adult: '',
+      max_child: '',
       isLoading: false,
     };
-  }
-
-  componentDidMount() {
-    this.fetchRoomType();
   }
 
   componentDidUpdate(prevProps) {
     console.log(this.props);
     if (prevProps.id !== this.props.id) {
       if (this.props.id !== null) {
-        this.fetchRate();
+        this.fetchRoomType();
       } else {
         this.setState({
           code: '',
           name: '',
           description: '',
-          amount_nett: '',
-          id_room_type: undefined,
+          max_adult: '',
+          max_child: '',
         });
       }
     }
   }
 
-  fetchRate() {
+  fetchRoomType() {
     const { id } = this.props
     if (id && id !== null) {
       this.setState({ isLoading: true });
-      Axios.get(`rate/${id}`)
+      Axios.get(`roomtype/${id}`)
       .then(res => {
         this.setState({
           isLoading: false,
@@ -56,15 +51,6 @@ class RateForm extends React.Component {
     }
   }
 
-  fetchRoomType = () => {
-    Axios.get('roomtype/all')
-    .then(res => {
-      this.setState({
-        roomTypeData: res.data,
-      });
-    });
-  }
-
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -72,23 +58,23 @@ class RateForm extends React.Component {
   }
 
   handleSubmit = () => {
-    const { code, name, description, amount_nett, id_room_type } = this.state;
+    const { code, name, description, max_adult, max_child } = this.state;
 
     const data = {
       code,
       name,
       description,
-      amount_nett,
-      id_room_type,
+      max_adult,
+      max_child,
     }
 
-    if (code == '' || code == 'name' || description == '' || amount_nett < 0) {
+    if (code == '' || code == 'name' || description == '') {
       return;
     }
 
-    let req = Axios.post('rate', data);
+    let req = Axios.post('roomtype', data);
     if (this.props.id && this.props.id !== null) {
-      req = Axios.put(`rate/${this.props.id}`, data);
+      req = Axios.put(`roomtype/${this.props.id}`, data);
     }
 
     this.setState({ isLoading: true });
@@ -105,7 +91,7 @@ class RateForm extends React.Component {
   }
 
   render() {
-    const { code, name, description, amount_nett, id_room_type, isLoading } = this.state;
+    const { code, name, description, max_adult, max_child, isLoading } = this.state;
     return(
       <Form>
         <TextField
@@ -130,31 +116,25 @@ class RateForm extends React.Component {
           onChange={this.handleChange}
         />
         <TextField
-          label="Amount"
-          name="amount_nett"
-          value={amount_nett}
+          label="Max Adult"
+          name="max_adult"
+          value={max_adult}
           disabled={isLoading}
           onChange={this.handleChange}
         />
-        <Form.Item>
-          <Select
-            name="id_room_type"
-            value={id_room_type}
-            onChange={(id_room_type) => this.setState({ id_room_type })}
-          >
-            {
-              roomTypeData.map(rt => (
-                <Select.Option key={rt.id_room_type} value={rt.id_room_type}> { rt.code } - { rt.description } </Select.Option>
-              ))
-            }
-          </Select>
-        </Form.Item>
+        <TextField
+          label="Max Child"
+          name="max_child"
+          value={max_child}
+          disabled={isLoading}
+          onChange={this.handleChange}
+        />
         <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={code == '' || code == 'name' || description == '' || amount_nett < 0} loading={isLoading}> Submit </Button>
+          <Button type="primary" onClick={this.handleSubmit} disabled={code == '' || code == 'name' || description == ''} loading={isLoading}> Submit </Button>
         </div>
       </Form>
     );
   }
 }
 
-export default RateForm;
+export default RoomTypeForm;

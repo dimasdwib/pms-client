@@ -6,6 +6,7 @@ import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
 import { RoomFoStatus, RoomHkStatus } from '../../../Components/Label/Label';
+import RoomTypeForm from './RoomTypeForm';
 
 const { confirm } = Modal;
 
@@ -15,15 +16,16 @@ class RoomTypePage extends React.Component {
     super(props);
     this.state = {
       tableKey: 0, // init table key
+      editRoomType: null,
     };
   }
 
   columns = [
     {
-      title: 'COde',
+      title: 'Code',
       dataIndex: 'code',
       key: 'code',
-    }, 
+    },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -46,9 +48,7 @@ class RoomTypePage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/roomtype/${record.id_room_type}`)}>
-            <Button icon="edit" type="primary" />
-          </Link>
+          <Button icon="edit" type="primary" onClick={() => this.setState({ openRoomForm: true, editRoom: record.id_room })} />
           &nbsp;
           <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteRoom)} />
         </span>
@@ -91,17 +91,39 @@ class RoomTypePage extends React.Component {
     });
   }
 
+  onSuccess = (res) => {
+    console.log(res);
+    this.setState({ openRoomTypeForm: false, tableKey: this.state.tableKey + 1 });
+    notification.success({
+      message: 'success',
+      description: res.data.message,
+    });
+  }
+
   tableAction = [
     {
       label: 'Create',
       icon: 'plus',
-      linkTo: AdminUrl('/roomtype/create'),
+      onClick: () => this.setState({ openRoomTypeForm: true, editRoomType: null }),
     }
   ];
 
   render() {
     return (
       <BasePage pageTitle="Room Type">
+        <Modal
+          title="Room Type"
+          centered
+          visible={this.state.openRoomTypeForm}
+          maskClosable={false}
+          onCancel={() => this.setState({ openRoomTypeForm: false })}
+          footer={null}
+        >
+          <RoomTypeForm
+            id={this.state.editRoomType}
+            onSuccess={this.onSuccess}
+          />
+        </Modal>
         <Row>
           <Col span={24}>
             <ResourceTable

@@ -1,49 +1,48 @@
 import React from 'react';
-import { Form, Button, Select } from 'antd';
+import { Form, Button } from 'antd';
 import TextField from '../../../Components/Form/TextField';
 import Axios from 'axios';
 
-class RateForm extends React.Component {
+class RoomForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      code: '',
-      name: '',
+      number: '',
       description: '',
-      amount_nett: '',
       id_room_type: undefined,
-      roomTypeData: [],
+      id_bed_type: undefined,
       isLoading: false,
+      roomTypeData: [],
+      bedData: [],
     };
   }
 
   componentDidMount() {
-    this.fetchRoomType();
+    this.fetchAttr();
   }
 
   componentDidUpdate(prevProps) {
     console.log(this.props);
     if (prevProps.id !== this.props.id) {
       if (this.props.id !== null) {
-        this.fetchRate();
+        this.fetchRoom();
       } else {
         this.setState({
-          code: '',
-          name: '',
+          number: '',
           description: '',
-          amount_nett: '',
           id_room_type: undefined,
+          id_bed_type: undefined,
         });
       }
     }
   }
 
-  fetchRate() {
+  fetchRoom = () => {
     const { id } = this.props
     if (id && id !== null) {
       this.setState({ isLoading: true });
-      Axios.get(`rate/${id}`)
+      Axios.get(`room/${id}`)
       .then(res => {
         this.setState({
           isLoading: false,
@@ -56,12 +55,18 @@ class RateForm extends React.Component {
     }
   }
 
-  fetchRoomType = () => {
-    Axios.get('roomtype/all')
+  fetchAttr = () => {
+    Axios.get('/bed/all')
+    .then(res => {
+      this.setState({
+        bedData: res.data,
+      })
+    });
+    Axios.get('/roomtype/all')
     .then(res => {
       this.setState({
         roomTypeData: res.data,
-      });
+      })
     });
   }
 
@@ -72,23 +77,22 @@ class RateForm extends React.Component {
   }
 
   handleSubmit = () => {
-    const { code, name, description, amount_nett, id_room_type } = this.state;
+    const { number, id_room_type, id_bed_type, description } = this.state;
 
     const data = {
-      code,
-      name,
-      description,
-      amount_nett,
+      number,
       id_room_type,
+      id_bed_type,
+      description,
     }
 
-    if (code == '' || code == 'name' || description == '' || amount_nett < 0) {
+    if (number == '') {
       return;
     }
 
-    let req = Axios.post('rate', data);
+    let req = Axios.post('room', data);
     if (this.props.id && this.props.id !== null) {
-      req = Axios.put(`rate/${this.props.id}`, data);
+      req = Axios.put(`room/${this.props.id}`, data);
     }
 
     this.setState({ isLoading: true });
@@ -105,20 +109,13 @@ class RateForm extends React.Component {
   }
 
   render() {
-    const { code, name, description, amount_nett, id_room_type, isLoading } = this.state;
+    const { number, id_room_type, id_bed, isLoading, description } = this.state;
     return(
       <Form>
         <TextField
-          label="Code"
-          name="code"
-          value={code}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Name"
-          name="name"
-          value={name}
+          label="Number"
+          name="number"
+          value={number}
           disabled={isLoading}
           onChange={this.handleChange}
         />
@@ -129,13 +126,19 @@ class RateForm extends React.Component {
           disabled={isLoading}
           onChange={this.handleChange}
         />
-        <TextField
-          label="Amount"
-          name="amount_nett"
-          value={amount_nett}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
+        <Form.Item>
+          <Select
+            name="id_bed"
+            value={id_bed}
+            onChange={(id_bed) => this.setState({ id_bed })}
+          >
+            {
+              bedData.map(rt => (
+                <Select.Option key={rt.id_bed} value={rt.id_bed}> { rt.code } - { rt.description } </Select.Option>
+              ))
+            }
+          </Select>
+        </Form.Item>
         <Form.Item>
           <Select
             name="id_room_type"
@@ -150,11 +153,11 @@ class RateForm extends React.Component {
           </Select>
         </Form.Item>
         <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={code == '' || code == 'name' || description == '' || amount_nett < 0} loading={isLoading}> Submit </Button>
+          <Button type="primary" onClick={this.handleSubmit} disabled={number == ''} loading={isLoading}> Submit </Button>
         </div>
       </Form>
     );
   }
 }
 
-export default RateForm;
+export default RoomForm;

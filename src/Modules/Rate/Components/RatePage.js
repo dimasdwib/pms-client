@@ -6,6 +6,7 @@ import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
 import { Currency } from '../../../Helper/Currency';
+import RateForm from './RateForm';
 
 const { confirm } = Modal;
 
@@ -23,7 +24,7 @@ class RatePage extends React.Component {
       title: 'Code',
       dataIndex: 'code',
       key: 'code',
-    }, 
+    },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -52,9 +53,7 @@ class RatePage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/rate/${record.id_rate}`)}>
-            <Button icon="edit" type="primary" />
-          </Link>
+          <Button icon="edit" type="primary" onClick={() => this.setState({ openRateForm: true, editRate: record.id_rate })} />
           &nbsp;
           <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteRate)} />
         </span>
@@ -97,17 +96,39 @@ class RatePage extends React.Component {
     });
   }
 
+  onSuccess = (res) => {
+    console.log(res);
+    this.setState({ openRateForm: false, tableKey: this.state.tableKey + 1 });
+    notification.success({
+      message: 'success',
+      description: res.data.message,
+    });
+  }
+
   tableAction = [
     {
       label: 'Create',
       icon: 'plus',
-      linkTo: AdminUrl('/rate/create'),
+      onClick: () => this.setState({ openRateForm: true, editRate: null }),
     }
   ];
 
   render() {
     return (
       <BasePage pageTitle="Rate">
+        <Modal
+          title="Rate"
+          centered
+          visible={this.state.openRateForm}
+          maskClosable={false}
+          onCancel={() => this.setState({ openRateForm: false })}
+          footer={null}
+        >
+          <RateForm
+            id={this.state.editRate}
+            onSuccess={this.onSuccess}
+          />
+        </Modal>
         <Row>
           <Col span={24}>
             <ResourceTable

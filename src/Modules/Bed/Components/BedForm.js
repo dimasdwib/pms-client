@@ -55,7 +55,7 @@ class BedForm extends React.Component {
 
   handleSubmit = () => {
     const { code, name, description } = this.state;
-    
+
     const data = {
       code,
       name,
@@ -64,7 +64,7 @@ class BedForm extends React.Component {
 
     if (code == '' || code == 'name' || description == '') {
       return;
-    } 
+    }
 
     let req = Axios.post('bed', data);
     if (this.props.id && this.props.id !== null) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'antd';
+import { Form, Button, Select } from 'antd';
 import TextField from '../../../Components/Form/TextField';
 import Axios from 'axios';
 
@@ -77,9 +77,11 @@ class GuestForm extends React.Component {
       return;
     }
 
-    let req = Axios.post('guest', data);
+    let req;
     if (this.props.id && this.props.id !== null) {
       req = Axios.put(`guest/${this.props.id}`, data);
+    } else {
+      req = Axios.post('guest', data);
     }
 
     this.setState({ isLoading: true });
@@ -106,10 +108,47 @@ class GuestForm extends React.Component {
           disabled={isLoading}
           onChange={this.handleChange}
         />
+        <Select
+          name="title"
+          value={title}
+          onChange={(title) => this.setState({ title })}
+        >
+          <Select.Option key="mr" value="mr"> .Mr </Select.Option>
+          <Select.Option key="mrs" value="mrs"> .Mrs </Select.Option>
+          <Select.Option key="ms" value="ms"> .Ms </Select.Option>
+        </Select>
         <TextField
-          label="Description"
-          name="description"
-          value={description}
+          label="Email"
+          name="email"
+          value={email}
+          disabled={isLoading}
+          onChange={this.handleChange}
+        />
+        <TextField
+          label="Phone"
+          name="phone"
+          value={phone}
+          disabled={isLoading}
+          onChange={this.handleChange}
+        />
+        <TextField
+          label="Zipcode"
+          name="zipcode"
+          value={zipcode}
+          disabled={isLoading}
+          onChange={this.handleChange}
+        />
+        <TextField
+          label="Address"
+          name="address"
+          value={address}
+          disabled={isLoading}
+          onChange={this.handleChange}
+        />
+        <TextField
+          label="ID card"
+          name="idcard"
+          value={idcard}
           disabled={isLoading}
           onChange={this.handleChange}
         />

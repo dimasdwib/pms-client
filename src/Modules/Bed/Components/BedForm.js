@@ -62,7 +62,7 @@ class BedForm extends React.Component {
       description,
     }
 
-    if (code == '' || code == 'name' || description == '') {
+    if (code === '' || name === '' || description === '') {
       return;
     }
 
@@ -110,7 +110,7 @@ class BedForm extends React.Component {
           onChange={this.handleChange}
         />
         <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={code == '' || code == 'name' || description == ''} loading={isLoading}> Submit </Button>
+          <Button type="primary" onClick={this.handleSubmit} disabled={code === '' || name === '' || description === ''} loading={isLoading}> Submit </Button>
         </div>
       </Form>
     );

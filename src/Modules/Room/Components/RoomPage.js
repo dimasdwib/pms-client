@@ -6,6 +6,7 @@ import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
 import { RoomFoStatus, RoomHkStatus } from '../../../Components/Label/Label';
+import RoomForm from './RoomForm';
 
 const { confirm } = Modal;
 

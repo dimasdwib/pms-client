@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Button } from 'antd';
-import TextField from '../../../Components/Form/TextField';
+import { Form, Button, Select } from 'antd';
 import Axios from 'axios';
+import TextField from '../../../Components/Form/TextField';
 
 class RoomForm extends React.Component {
 
@@ -86,7 +86,7 @@ class RoomForm extends React.Component {
       description,
     }
 
-    if (number == '') {
+    if (number === '') {
       return;
     }
 
@@ -109,7 +109,7 @@ class RoomForm extends React.Component {
   }
 
   render() {
-    const { number, id_room_type, id_bed, isLoading, description } = this.state;
+    const { number, id_room_type, id_bed, isLoading, description, roomTypeData, bedData } = this.state;
     return(
       <Form>
         <TextField
@@ -153,7 +153,7 @@ class RoomForm extends React.Component {
           </Select>
         </Form.Item>
         <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={number == ''} loading={isLoading}> Submit </Button>
+          <Button type="primary" onClick={this.handleSubmit} disabled={number === ''} loading={isLoading}> Submit </Button>
         </div>
       </Form>
     );

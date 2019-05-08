@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Button, Select } from 'antd';
-import TextField from '../../../Components/Form/TextField';
 import Axios from 'axios';
+import TextField from '../../../Components/Form/TextField';
 
 class RateForm extends React.Component {
 
@@ -82,7 +82,7 @@ class RateForm extends React.Component {
       id_room_type,
     }
 
-    if (code == '' || code == 'name' || description == '' || amount_nett < 0) {
+    if (code === '' || name === '' || description === '' || amount_nett < 0) {
       return;
     }
 
@@ -105,7 +105,7 @@ class RateForm extends React.Component {
   }
 
   render() {
-    const { code, name, description, amount_nett, id_room_type, isLoading } = this.state;
+    const { code, name, description, amount_nett, id_room_type, isLoading, roomTypeData } = this.state;
     return(
       <Form>
         <TextField
@@ -150,7 +150,7 @@ class RateForm extends React.Component {
           </Select>
         </Form.Item>
         <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={code == '' || code == 'name' || description == '' || amount_nett < 0} loading={isLoading}> Submit </Button>
+          <Button type="primary" onClick={this.handleSubmit} disabled={code === '' || name === '' || description === '' || amount_nett < 0} loading={isLoading}> Submit </Button>
         </div>
       </Form>
     );

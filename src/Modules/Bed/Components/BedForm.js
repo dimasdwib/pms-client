@@ -66,9 +66,11 @@ class BedForm extends React.Component {
       return;
     }
 
-    let req = Axios.post('bed', data);
+    let req;
     if (this.props.id && this.props.id !== null) {
       req = Axios.put(`bed/${this.props.id}`, data);
+    } else {
+      req = Axios.post('bed', data);
     }
 
     this.setState({ isLoading: true });

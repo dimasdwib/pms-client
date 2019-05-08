@@ -14,6 +14,7 @@ class RoomTypeForm extends React.Component {
       max_adult: '',
       max_child: '',
       isLoading: false,
+      size: '',
     };
   }
 
@@ -27,6 +28,7 @@ class RoomTypeForm extends React.Component {
           code: '',
           name: '',
           description: '',
+          size: '',
           max_adult: '',
           max_child: '',
         });
@@ -58,7 +60,7 @@ class RoomTypeForm extends React.Component {
   }
 
   handleSubmit = () => {
-    const { code, name, description, max_adult, max_child } = this.state;
+    const { code, name, description, max_adult, size, max_child } = this.state;
 
     const data = {
       code,
@@ -66,15 +68,18 @@ class RoomTypeForm extends React.Component {
       description,
       max_adult,
       max_child,
+      size,
     }
 
     if (code === '' || name === '' || description === '') {
       return;
     }
 
-    let req = Axios.post('roomtype', data);
+    let req;
     if (this.props.id && this.props.id !== null) {
       req = Axios.put(`roomtype/${this.props.id}`, data);
+    } else {
+      req = Axios.post('roomtype', data);
     }
 
     this.setState({ isLoading: true });
@@ -91,7 +96,7 @@ class RoomTypeForm extends React.Component {
   }
 
   render() {
-    const { code, name, description, max_adult, max_child, isLoading } = this.state;
+    const { code, name, description, max_adult, max_child, size, isLoading } = this.state;
     return(
       <Form>
         <TextField
@@ -112,6 +117,13 @@ class RoomTypeForm extends React.Component {
           label="Description"
           name="description"
           value={description}
+          disabled={isLoading}
+          onChange={this.handleChange}
+        />
+        <TextField
+          label="Size"
+          name="size"
+          value={size}
           disabled={isLoading}
           onChange={this.handleChange}
         />

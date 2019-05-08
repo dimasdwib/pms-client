@@ -32,6 +32,11 @@ class RoomTypePage extends React.Component {
       key: 'name',
     },
     {
+      title: 'Size',
+      dataIndex: 'size',
+      key: 'size',
+    },
+    {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',

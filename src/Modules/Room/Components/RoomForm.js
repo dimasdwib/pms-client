@@ -5,6 +5,17 @@ import TextField from '../../../Components/Form/TextField';
 
 class RoomForm extends React.Component {
 
+  formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -77,12 +88,12 @@ class RoomForm extends React.Component {
   }
 
   handleSubmit = () => {
-    const { number, id_room_type, id_bed_type, description } = this.state;
+    const { number, id_room_type, id_bed, description } = this.state;
 
     const data = {
       number,
       id_room_type,
-      id_bed_type,
+      id_bed,
       description,
     }
 
@@ -90,9 +101,11 @@ class RoomForm extends React.Component {
       return;
     }
 
-    let req = Axios.post('room', data);
+    let req;
     if (this.props.id && this.props.id !== null) {
       req = Axios.put(`room/${this.props.id}`, data);
+    } else {
+      req = Axios.post('room', data);
     }
 
     this.setState({ isLoading: true });
@@ -126,7 +139,10 @@ class RoomForm extends React.Component {
           disabled={isLoading}
           onChange={this.handleChange}
         />
-        <Form.Item>
+        <Form.Item
+          {...this.formItemLayout}
+          label="Bed"
+        >
           <Select
             name="id_bed"
             value={id_bed}
@@ -139,7 +155,10 @@ class RoomForm extends React.Component {
             }
           </Select>
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          {...this.formItemLayout}
+          label="Room type"
+        >
           <Select
             name="id_room_type"
             value={id_room_type}

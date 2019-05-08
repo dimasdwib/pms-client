@@ -53,9 +53,7 @@ class RoomPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/room/${record.id_room}`)}>
-            <Button icon="edit" type="primary" />
-          </Link>
+          <Button icon="edit" type="primary" onClick={() => this.setState({ openRoomForm: true, editRoom: record.id_room })} />
           &nbsp;
           <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteRoom)} />
         </span>

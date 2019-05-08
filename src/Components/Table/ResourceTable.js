@@ -163,7 +163,7 @@ class ResourceTable extends React.Component {
       if (Number(total) === 1) {
         return `Total ${total} item`;
       }
-      return null; 
+      return null;
     }
 
     return null;
@@ -228,7 +228,7 @@ class ResourceTable extends React.Component {
               loading={loading}
               dataSource={dataSource}
               columns={this.props.columns}
-              pagination={{position: 'none'}}
+              pagination={false}
               rowKey={this.props.rowKey || 'id'}
             />
           </Col>

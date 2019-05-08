@@ -5,6 +5,17 @@ import TextField from '../../../Components/Form/TextField';
 
 class RateForm extends React.Component {
 
+  formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -86,9 +97,11 @@ class RateForm extends React.Component {
       return;
     }
 
-    let req = Axios.post('rate', data);
+    let req;
     if (this.props.id && this.props.id !== null) {
       req = Axios.put(`rate/${this.props.id}`, data);
+    } else {
+      req = Axios.post('rate', data);
     }
 
     this.setState({ isLoading: true });
@@ -136,7 +149,10 @@ class RateForm extends React.Component {
           disabled={isLoading}
           onChange={this.handleChange}
         />
-        <Form.Item>
+        <Form.Item
+          {...this.formItemLayout}
+          label="Room type"
+        >
           <Select
             name="id_room_type"
             value={id_room_type}

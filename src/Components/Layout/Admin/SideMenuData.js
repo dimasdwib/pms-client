@@ -69,6 +69,11 @@ export default [
         path: AdminUrl('/bed'),
       },
       {
+        label: 'Floors',
+        id: 'floors',
+        path: AdminUrl('/floor'),
+      },
+      {
         label: 'Rooms',
         id: 'rooms',
         path: AdminUrl('/room'),

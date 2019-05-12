@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'antd';
+import { Form, Button, Spin, notification } from 'antd';
 import TextField from '../../../Components/Form/TextField';
 import Axios from 'axios';
 
@@ -16,6 +16,21 @@ class RoomTypeForm extends React.Component {
       isLoading: false,
       size: '',
     };
+  }
+
+  componentDidMount() {
+    if (this.props.id !== null) {
+      this.fetchRoomType();
+    } else {
+      this.setState({
+        code: '',
+        name: '',
+        description: '',
+        size: '',
+        max_adult: '',
+        max_child: '',
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -92,59 +107,67 @@ class RoomTypeForm extends React.Component {
     .catch(err => {
       this.setState({ isLoading: false });
       console.log(err);
+      if (err.response) {
+        notification.error({
+          message: 'Error',
+          description: err.response.data.message,
+        });
+      }
     });
   }
 
   render() {
     const { code, name, description, max_adult, max_child, size, isLoading } = this.state;
     return(
-      <Form>
-        <TextField
-          label="Code"
-          name="code"
-          value={code}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Name"
-          name="name"
-          value={name}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={description}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Size"
-          name="size"
-          value={size}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Max Adult"
-          name="max_adult"
-          value={max_adult}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Max Child"
-          name="max_child"
-          value={max_child}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={code === '' || name === '' || description === ''} loading={isLoading}> Submit </Button>
-        </div>
-      </Form>
+      <Spin spinning={isLoading}>
+        <Form>
+          <TextField
+            label="Code"
+            name="code"
+            value={code}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <TextField
+            label="Name"
+            name="name"
+            value={name}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <TextField
+            label="Description"
+            name="description"
+            value={description}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <TextField
+            label="Size"
+            name="size"
+            value={size}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <TextField
+            label="Max Adult"
+            name="max_adult"
+            value={max_adult}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <TextField
+            label="Max Child"
+            name="max_child"
+            value={max_child}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <div style={{ textAlign: 'right' }}>
+            <Button type="primary" onClick={this.handleSubmit} disabled={code === '' || name === '' || description === ''} loading={isLoading}> Submit </Button>
+          </div>
+        </Form>
+      </Spin>
     );
   }
 }

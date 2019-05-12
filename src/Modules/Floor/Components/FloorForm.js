@@ -1,45 +1,28 @@
 import React from 'react';
-import { Form, Button, Select, Spin, notification } from 'antd';
-import Axios from 'axios';
+import { Form, Button, Spin, notification } from 'antd';
 import TextField from '../../../Components/Form/TextField';
+import Axios from 'axios';
 
-class RateForm extends React.Component {
-
-  formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
-    },
-  };
+class FloorForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      code: '',
+      order: 0,
       name: '',
       description: '',
-      amount_nett: '',
-      id_room_type: undefined,
-      roomTypeData: [],
       isLoading: false,
     };
   }
 
   componentDidMount() {
-    this.fetchRoomType();
     if (this.props.id !== null) {
-      this.fetchRate();
+      this.fetchFloor();
     } else {
       this.setState({
-        code: '',
+        order: 0,
         name: '',
         description: '',
-        amount_nett: '',
-        id_room_type: undefined,
       });
     }
   }
@@ -48,24 +31,22 @@ class RateForm extends React.Component {
     console.log(this.props);
     if (prevProps.id !== this.props.id) {
       if (this.props.id !== null) {
-        this.fetchRate();
+        this.fetchFloor();
       } else {
         this.setState({
-          code: '',
+          order: 0,
           name: '',
           description: '',
-          amount_nett: '',
-          id_room_type: undefined,
         });
       }
     }
   }
 
-  fetchRate = () => {
-    const { id } = this.props;
+  fetchFloor = () => {
+    const { id } = this.props
     if (id && id !== null) {
       this.setState({ isLoading: true });
-      Axios.get(`rate/${id}`)
+      Axios.get(`floor/${id}`)
       .then(res => {
         this.setState({
           isLoading: false,
@@ -78,15 +59,6 @@ class RateForm extends React.Component {
     }
   }
 
-  fetchRoomType = () => {
-    Axios.get('roomtype/all')
-    .then(res => {
-      this.setState({
-        roomTypeData: res.data,
-      });
-    });
-  }
-
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -94,25 +66,23 @@ class RateForm extends React.Component {
   }
 
   handleSubmit = () => {
-    const { code, name, description, amount_nett, id_room_type } = this.state;
+    const { order, name, description } = this.state;
 
     const data = {
-      code,
+      order,
       name,
       description,
-      amount_nett,
-      id_room_type,
     }
 
-    if (code === '' || name === '' || description === '' || amount_nett < 0) {
+    if (order === '' || name === '' || description === '') {
       return;
     }
 
     let req;
     if (this.props.id && this.props.id !== null) {
-      req = Axios.put(`rate/${this.props.id}`, data);
+      req = Axios.put(`floor/${this.props.id}`, data);
     } else {
-      req = Axios.post('rate', data);
+      req = Axios.post('floor', data);
     }
 
     this.setState({ isLoading: true });
@@ -135,14 +105,16 @@ class RateForm extends React.Component {
   }
 
   render() {
-    const { code, name, description, amount_nett, id_room_type, isLoading, roomTypeData } = this.state;
+    const { order, name, description, isLoading } = this.state;
     return(
       <Spin spinning={isLoading}>
         <Form>
           <TextField
-            label="Code"
-            name="code"
-            value={code}
+            label="Order"
+            name="order"
+            type="number"
+            min="0"
+            value={order}
             disabled={isLoading}
             onChange={this.handleChange}
           />
@@ -160,31 +132,8 @@ class RateForm extends React.Component {
             disabled={isLoading}
             onChange={this.handleChange}
           />
-          <TextField
-            label="Amount"
-            name="amount_nett"
-            value={amount_nett}
-            disabled={isLoading}
-            onChange={this.handleChange}
-          />
-          <Form.Item
-            {...this.formItemLayout}
-            label="Room type"
-          >
-            <Select
-              name="id_room_type"
-              value={id_room_type}
-              onChange={(id_room_type) => this.setState({ id_room_type })}
-            >
-              {
-                roomTypeData.map(rt => (
-                  <Select.Option key={rt.id_room_type} value={rt.id_room_type}> { rt.code } - { rt.description } </Select.Option>
-                ))
-              }
-            </Select>
-          </Form.Item>
           <div style={{ textAlign: 'right' }}>
-            <Button type="primary" onClick={this.handleSubmit} disabled={code === '' || name === '' || description === '' || amount_nett < 0} loading={isLoading}> Submit </Button>
+            <Button type="primary" onClick={this.handleSubmit} disabled={order === '' || name === '' || description === ''} loading={isLoading}> Submit </Button>
           </div>
         </Form>
       </Spin>
@@ -192,4 +141,4 @@ class RateForm extends React.Component {
   }
 }
 
-export default RateForm;
+export default FloorForm;

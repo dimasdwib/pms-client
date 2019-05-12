@@ -125,6 +125,7 @@ class RatePage extends React.Component {
           footer={null}
         >
           <RateForm
+            key={this.state.editRate}
             id={this.state.editRate}
             onSuccess={this.onSuccess}
           />

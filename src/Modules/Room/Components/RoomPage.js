@@ -125,6 +125,7 @@ class RoomPage extends React.Component {
           footer={null}
         >
           <RoomForm
+            key={this.state.editRoom}
             id={this.state.editRoom}
             onSuccess={this.onSuccess}
           />

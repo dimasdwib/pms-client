@@ -1,40 +1,32 @@
 import React from 'react';
 import { Row, Col, Button, Modal, notification } from 'antd';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
-import { AdminUrl } from '../../../Helper/RouteHelper';
-import { RoomFoStatus, RoomHkStatus } from '../../../Components/Label/Label';
-import RoomTypeForm from './RoomTypeForm';
+import FloorForm from './FloorForm';
 
 const { confirm } = Modal;
 
-class RoomTypePage extends React.Component {
+class FloorPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       tableKey: 0, // init table key
-      editRoomType: null,
+      editFloor: null,
     };
   }
 
   columns = [
     {
-      title: 'Code',
-      dataIndex: 'code',
-      key: 'code',
-    },
+      title: 'Order',
+      dataIndex: 'order',
+      key: 'order',
+    }, 
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-    },
-    {
-      title: 'Size',
-      dataIndex: 'size',
-      key: 'size',
     },
     {
       title: 'Description',
@@ -42,30 +34,22 @@ class RoomTypePage extends React.Component {
       key: 'description',
     },
     {
-      title: 'Adult/Child',
-      dataIndex: 'adultchild',
-      key: 'adultchild',
-      render: (adult, record) => (
-        <span> { record.max_adult } / { record.max_child } </span>
-      )
-    },
-    {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Button icon="edit" type="primary" onClick={() => this.setState({ openRoomTypeForm: true, editRoomType: record.id_room_type })} />
+          <Button icon="edit" type="primary" onClick={() => this.setState({ openFloorForm: true, editFloor: record.id_floor })} />
           &nbsp;
-          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteRoomType)} />
+          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteFloor)} />
         </span>
       ),
     }
   ];
 
-  deleteRoomType = (id, resolve, reject) => {
-    axios.delete(`/roomtype/${id}`)
+  deleteFloor = (id, resolve, reject) => {
+    axios.delete(`/floor/${id}`)
     .then(res => {
       resolve();
-      this.setState({ tableKey: id});
+      this.setState({ tableKey: this.state.tableKey + id });
       notification.success({
         message: 'Success',
         description: res.data.message,
@@ -82,14 +66,14 @@ class RoomTypePage extends React.Component {
     });
   }
 
-  confirmDelete = (record, deleteRoomType) => {
+  confirmDelete = (record, deleteFloor) => {
     confirm({
-      title: `Do you want to delete room type ${record.name}?`,
+      title: `Do you want to delete ${record.name}?`,
       okText: 'Yes',
       okType: 'danger',
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteRoomType(record.id_room_type, resolve, reject);
+          deleteFloor(record.id_floor, resolve, reject);
         });
       },
       onCancel() {},
@@ -98,7 +82,7 @@ class RoomTypePage extends React.Component {
 
   onSuccess = (res) => {
     console.log(res);
-    this.setState({ openRoomTypeForm: false, tableKey: this.state.tableKey + 1 });
+    this.setState({ openFloorForm: false, tableKey: this.state.tableKey + 1 });
     notification.success({
       message: 'success',
       description: res.data.message,
@@ -109,33 +93,33 @@ class RoomTypePage extends React.Component {
     {
       label: 'Create',
       icon: 'plus',
-      onClick: () => this.setState({ openRoomTypeForm: true, editRoomType: null }),
+      onClick: () => this.setState({ openFloorForm: true, editFloor: null }),
     }
   ];
 
   render() {
     return (
-      <BasePage pageTitle="Room Type">
+      <BasePage pageTitle="Floor">
         <Modal
-          title="Room Type"
+          title="Floor"
           centered
-          visible={this.state.openRoomTypeForm}
+          visible={this.state.openFloorForm}
           maskClosable={false}
-          onCancel={() => this.setState({ openRoomTypeForm: false })}
+          onCancel={() => this.setState({ openFloorForm: false })}
           footer={null}
         >
-          <RoomTypeForm
-            key={this.state.editRoomType}
-            id={this.state.editRoomType}
+          <FloorForm
+            key={this.state.editFloor}
+            id={this.state.editFloor}
             onSuccess={this.onSuccess}
           />
         </Modal>
         <Row>
           <Col span={24}>
             <ResourceTable
-              rowKey="id_room_type"
+              rowKey="id_floor"
               key={this.state.tableKey}
-              resourceUrl={'/roomtype'}
+              resourceUrl={'/floor'}
               columns={this.columns}
               tableAction={this.tableAction}
             />
@@ -146,4 +130,4 @@ class RoomTypePage extends React.Component {
   }
 }
 
-export default RoomTypePage;
+export default FloorPage;

@@ -15,6 +15,7 @@ import ReportRoutes from './Report/ReportRoutes';
 import AuditRoutes from './Audit/AuditRoutes';
 import SettingRoutes from './Setting/SettingRoutes';
 import RoomTypeRoutes from './RoomType/RoomTypeRoutes';
+import floorRoutes from './Floor/floorRoutes';
 
 export default [
   {
@@ -37,6 +38,7 @@ export default [
       ...ReportRoutes,
       ...AuditRoutes,
       ...SettingRoutes,
+      ...floorRoutes,
     ],
   },
 ]

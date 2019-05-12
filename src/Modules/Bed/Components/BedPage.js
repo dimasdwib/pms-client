@@ -111,6 +111,7 @@ class BedPage extends React.Component {
           footer={null}
         >
           <BedForm
+            key={this.state.editBed}
             id={this.state.editBed}
             onSuccess={this.onSuccess}
           />

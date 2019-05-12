@@ -5,6 +5,7 @@ import axios from 'axios';
 import BasePage from '../../../Components/Layout/Admin/BasePage';
 import ResourceTable from '../../../Components/Table/ResourceTable';
 import { AdminUrl } from '../../../Helper/RouteHelper';
+import GuestForm from './GuestForm';
 
 const { confirm } = Modal;
 
@@ -14,6 +15,7 @@ class GuestPage extends React.Component {
     super(props);
     this.state = {
       tableKey: 0, // init table key
+      editGuest: null,
     };
   }
 
@@ -40,9 +42,7 @@ class GuestPage extends React.Component {
       title: 'Action',
       render: (text, record) => (
         <span>
-          <Link to={AdminUrl(`/guest/${record.id_guest}`)}>
-            <Button icon="edit" type="primary" />
-          </Link>
+          <Button icon="edit" type="primary" onClick={() => this.setState({ openGuestForm: true, editGuest: record.id_guest })} />
           &nbsp;
           <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteGuest)} />
         </span>
@@ -85,17 +85,40 @@ class GuestPage extends React.Component {
     });
   }
 
+  onSuccess = (res) => {
+    console.log(res);
+    this.setState({ openGuestForm: false, tableKey: this.state.tableKey + 1 });
+    notification.success({
+      message: 'success',
+      description: res.data.message,
+    });
+  }
+
   tableAction = [
     {
       label: 'Create',
       icon: 'plus',
-      linkTo: AdminUrl('/guest/create'),
+      onClick: () => this.setState({ openGuestForm: true, editGuest: null }),
     }
   ];
 
   render() {
     return (
       <BasePage pageTitle="Guest">
+        <Modal
+          title="Guest"
+          centered
+          visible={this.state.openGuestForm}
+          maskClosable={false}
+          onCancel={() => this.setState({ openGuestForm: false })}
+          footer={null}
+        >
+          <GuestForm
+            key={this.state.editGuest}
+            id={this.state.editGuest}
+            onSuccess={this.onSuccess}
+          />
+        </Modal>
         <Row>
           <Col span={24}>
             <ResourceTable

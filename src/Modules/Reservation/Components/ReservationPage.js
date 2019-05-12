@@ -61,7 +61,7 @@ class ReservationPage extends React.Component {
             <Button icon="edit" type="primary" />
           </Link>
           &nbsp;
-          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteBed)} />
+          <Button icon="delete" type="danger" onClick={() => this.confirmDelete(record, this.deleteReservation)} />
         </span>
       ),
     }

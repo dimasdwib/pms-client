@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Select } from 'antd';
+import { Form, Button, Select, Spin, notification } from 'antd';
 import Axios from 'axios';
 import TextField from '../../../Components/Form/TextField';
 
@@ -23,14 +23,27 @@ class RoomForm extends React.Component {
       description: '',
       id_room_type: undefined,
       id_bed_type: undefined,
+      id_floor: undefined,
       isLoading: false,
       roomTypeData: [],
       bedData: [],
+      floorData: [],
     };
   }
-
+  
   componentDidMount() {
     this.fetchAttr();
+    if (this.props.id !== null) {
+      this.fetchRoom();
+    } else {
+      this.setState({
+        number: '',
+        description: '',
+        id_room_type: undefined,
+        id_bed_type: undefined,
+        id_floor: undefined,
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -44,6 +57,7 @@ class RoomForm extends React.Component {
           description: '',
           id_room_type: undefined,
           id_bed_type: undefined,
+          id_floor: undefined,
         });
       }
     }
@@ -79,6 +93,12 @@ class RoomForm extends React.Component {
         roomTypeData: res.data,
       })
     });
+    Axios.get('/floor/all')
+    .then(res => {
+      this.setState({
+        floorData: res.data,
+      })
+    });
   }
 
   handleChange = (e) => {
@@ -88,12 +108,13 @@ class RoomForm extends React.Component {
   }
 
   handleSubmit = () => {
-    const { number, id_room_type, id_bed, description } = this.state;
+    const { number, id_room_type, id_bed, description, id_floor } = this.state;
 
     const data = {
       number,
       id_room_type,
       id_bed,
+      id_floor,
       description,
     }
 
@@ -118,63 +139,88 @@ class RoomForm extends React.Component {
     .catch(err => {
       this.setState({ isLoading: false });
       console.log(err);
+      if (err.response) {
+        notification.error({
+          message: 'Error',
+          description: err.response.data.message,
+        });
+      }
     });
   }
 
   render() {
-    const { number, id_room_type, id_bed, isLoading, description, roomTypeData, bedData } = this.state;
+    const { number, id_room_type, id_bed, id_floor, isLoading, description,
+      roomTypeData, floorData, bedData } = this.state;
     return(
-      <Form>
-        <TextField
-          label="Number"
-          name="number"
-          value={number}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={description}
-          disabled={isLoading}
-          onChange={this.handleChange}
-        />
-        <Form.Item
-          {...this.formItemLayout}
-          label="Bed"
-        >
-          <Select
-            name="id_bed"
-            value={id_bed}
-            onChange={(id_bed) => this.setState({ id_bed })}
+      <Spin spinning={isLoading}>
+        <Form>
+          <Form.Item
+            {...this.formItemLayout}
+            label="Floor"
           >
-            {
-              bedData.map(rt => (
-                <Select.Option key={rt.id_bed} value={rt.id_bed}> { rt.code } - { rt.description } </Select.Option>
-              ))
-            }
-          </Select>
-        </Form.Item>
-        <Form.Item
-          {...this.formItemLayout}
-          label="Room type"
-        >
-          <Select
-            name="id_room_type"
-            value={id_room_type}
-            onChange={(id_room_type) => this.setState({ id_room_type })}
+            <Select
+              name="id_floor"
+              value={id_floor}
+              onChange={(id_floor) => this.setState({ id_floor })}
+            >
+              {
+                floorData.map(f => (
+                  <Select.Option key={f.id_floor} value={f.id_floor}> { f.name } - { f.description } </Select.Option>
+                ))
+              }
+            </Select>
+          </Form.Item>
+          <TextField
+            label="Number"
+            name="number"
+            value={number}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <TextField
+            label="Description"
+            name="description"
+            value={description}
+            disabled={isLoading}
+            onChange={this.handleChange}
+          />
+          <Form.Item
+            {...this.formItemLayout}
+            label="Bed"
           >
-            {
-              roomTypeData.map(rt => (
-                <Select.Option key={rt.id_room_type} value={rt.id_room_type}> { rt.code } - { rt.description } </Select.Option>
-              ))
-            }
-          </Select>
-        </Form.Item>
-        <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={this.handleSubmit} disabled={number === ''} loading={isLoading}> Submit </Button>
-        </div>
-      </Form>
+            <Select
+              name="id_bed"
+              value={id_bed}
+              onChange={(id_bed) => this.setState({ id_bed })}
+            >
+              {
+                bedData.map(rt => (
+                  <Select.Option key={rt.id_bed} value={rt.id_bed}> { rt.code } - { rt.description } </Select.Option>
+                ))
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item
+            {...this.formItemLayout}
+            label="Room type"
+          >
+            <Select
+              name="id_room_type"
+              value={id_room_type}
+              onChange={(id_room_type) => this.setState({ id_room_type })}
+            >
+              {
+                roomTypeData.map(rt => (
+                  <Select.Option key={rt.id_room_type} value={rt.id_room_type}> { rt.code } - { rt.description } </Select.Option>
+                ))
+              }
+            </Select>
+          </Form.Item>
+          <div style={{ textAlign: 'right' }}>
+            <Button type="primary" onClick={this.handleSubmit} disabled={number === ''} loading={isLoading}> Submit </Button>
+          </div>
+        </Form>
+      </Spin>
     );
   }
 }

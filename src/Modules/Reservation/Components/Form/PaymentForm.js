@@ -12,6 +12,17 @@ class PaymentForm extends React.PureComponent {
     };
   }
 
+  formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
   payments = [
     {
       id_payment: 1,
@@ -46,6 +57,7 @@ class PaymentForm extends React.PureComponent {
         <Form>
           <Form.Item
             label="Type"
+            {...this.formItemLayout}
           >
             <Select
               onChange={(e) => this.setState({ type: e })}
@@ -62,9 +74,11 @@ class PaymentForm extends React.PureComponent {
             onChange={(e) => this.setState({ amount: e.target.value })}
           />
         </Form>
-        <Button onClick={this.handleAddPayment} type="primary">
-          Submit
-        </Button>
+        <div style={{ textAlign: 'right' }}>
+          <Button onClick={this.handleAddPayment} type="primary">
+            Submit
+          </Button>
+        </div>
       </div>
     );
   };

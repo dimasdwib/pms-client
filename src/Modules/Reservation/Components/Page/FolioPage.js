@@ -71,7 +71,7 @@ class RoomPage extends React.Component {
   }
 
   confirmCloseFolio = (record, closeFolio) => {
-    if (record.balance === 0) {
+    if (record.balance <= 0) {
       confirm({
         title: `Do you want to close folio ${record.number}?`,
         okText: 'Yes',

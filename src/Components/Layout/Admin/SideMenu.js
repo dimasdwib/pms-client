@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Icon, Menu  } from 'antd';
 import SideMenuData from './SideMenuData';
-import { ProtectComponent } from '../../../Helper/AuthHelper'; 
 
 const { SubMenu } = Menu;
 class SideMenu extends React.Component {
@@ -21,9 +21,16 @@ class SideMenu extends React.Component {
     }
   }
 
-  mapMenu(SideMenuData) {
+  mapMenu = (SideMenuData) => {
     const MainMenu = [];
+    const arrPermission = [];
+    const allPermission = this.props.auth.user.all_permission;
+    allPermission.forEach(p => { arrPermission.push(p.name) });
+
     SideMenuData.forEach((menu, i) => {
+      if (menu.permission && !arrPermission.includes(menu.permission) && !this.props.auth.user.role.includes('superadmin')) {
+        return;
+      }
       if (menu.child) {
         const child = this.mapMenu(menu.child, true);
         MainMenu.push(
@@ -86,4 +93,10 @@ class SideMenu extends React.Component {
   }
 }
 
-export default SideMenu;
+function mapStateToProps(state) {
+  return {
+    auth: state.Auth,
+  }
+}
+
+export default connect(mapStateToProps)(SideMenu);

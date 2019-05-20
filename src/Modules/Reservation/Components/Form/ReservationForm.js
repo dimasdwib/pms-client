@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, DatePicker, Modal, Divider, List,
+import { Row, Col, DatePicker, Modal, Divider, List, message,
   Form, Input, Dropdown, Button, Menu, Icon, Card, notification
 } from 'antd';
 import { Redirect } from 'react-router-dom';
@@ -13,6 +13,7 @@ import PaymentForm from './PaymentForm';
 import GuestForm from './GuestForm';
 import { IconArrival, IconDeparture } from '../../../../Components/Icon/Reservation';
 import { AdminUrl } from '../../../../Helper/RouteHelper';
+import { Currency } from '../../../../Helper/Currency';
 
 class ReservationForm extends React.Component {
 
@@ -57,6 +58,12 @@ class ReservationForm extends React.Component {
   handleArrival = (date, dateString) => {
     const { dateDeparture } = this.state;
     const night = dateDeparture.diff(date, 'd');
+
+    if (night < 0) {
+      message.error("Opps, invalid date");
+      return;
+    }
+
     this.setState({
       dateArrival: date,
       night,
@@ -65,7 +72,13 @@ class ReservationForm extends React.Component {
 
   handleDeparture = (date, dateString) => {
     const { dateArrival } = this.state;
-    const night = date.diff(dateArrival, 'd');    
+    const night = date.diff(dateArrival, 'd');
+    
+    if (night < 0) {
+      message.error("Opps, invalid date");
+      return;
+    }
+  
     this.setState({
       dateDeparture: date,
       night,
@@ -219,6 +232,7 @@ class ReservationForm extends React.Component {
                     size="large"
                     onChange={this.handleArrival}
                     value={dateArrival}
+                    format="DD-MM-YYYY"
                   />
                 </Form.Item>
               </Col>
@@ -247,6 +261,7 @@ class ReservationForm extends React.Component {
                     size="large"
                     onChange={this.handleDeparture}
                     value={dateDeparture}
+                    format="DD-MM-YYYY"
                   />
                 </Form.Item>
               </Col>
@@ -260,12 +275,13 @@ class ReservationForm extends React.Component {
                 </Card>
               :
                 <Col>
-                  <Button icon="user" type="dashed" block size="large" onClick={() => this.setState({ openModalBooker: true })}>
-                    Booker 
+                  <Button type="dashed" block size="large" onClick={() => this.setState({ openModalBooker: true })}>
+                    {/* Booker */}
+                    Guest
                   </Button>
                   <Modal
                     width='80%'
-                    title="Booker"
+                    title="Guest"
                     centered
                     visible={this.state.openModalBooker}
                     maskClosable={false}
@@ -304,7 +320,7 @@ class ReservationForm extends React.Component {
                           description={room.guests[0].name}
                         />
                         <div> 
-                          {room.rate.amount_nett}
+                          {Currency(room.rate.amount_nett)}
                         </div>
                       </List.Item>
                     );

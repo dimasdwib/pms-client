@@ -1,6 +1,9 @@
 import moment from 'moment';
 
 export function DateFormat(date, format) {
+  if (typeof date === 'undefined' || date === null || date === '') {
+    return null;
+  }
   if (format) {
     return moment(date).format(format);
   }
@@ -8,6 +11,9 @@ export function DateFormat(date, format) {
 }
 
 export function DateTimeFormat(date, format) {
+  if (typeof date === 'undefined' || date === null || date === '') {
+    return null;
+  }
   if (format) {
     return moment(date).format(format);
   }

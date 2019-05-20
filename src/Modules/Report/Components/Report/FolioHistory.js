@@ -1,76 +1,65 @@
 import React from 'react';
-import { Row, Col, Card, Typography, Table, notification, message,
-Form, DatePicker, Button } from 'antd';
+import { Row, Col, Card, Typography, Table, notification,
+  DatePicker, Form, Button, message } from 'antd';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { AdminUrl } from '../../../../Helper/RouteHelper';
-import axios from 'axios';
+import { DateFormat } from '../../../../Helper/DateTime';
+import { Currency } from '../../../../Helper/Currency';
 import moment from 'moment';
-import { DateTimeFormat } from '../../../../Helper/DateTime';
 
-class ReservationList extends React.PureComponent {
-
+class FolioHistory extends React.PureComponent {
+  
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      isLoadingData: false,
       from: moment(),
       to: moment(),
+      total: 0,
     };
   }
 
   columns = [
     {
-      title: 'Number',
-      dataIndex: 'number',
-      key: 'number',
-      render: (value, record) => (<Link to={AdminUrl(`/reservation/${record.id_reservation}`)}> { value } </Link>)
-    }, 
-    {
-      title: 'Booker',
-      dataIndex: 'booker',
-      key: 'booker',
-      render: (booker) => (
-        <span> { booker ? booker.name : null } </span>  
-      )
+      title: 'Folio Number',
+      dataIndex: 'folio_number',
+      key: 'folio_number',
+      render: (value, record) => (<Link to={AdminUrl(`/reservation/${record.id_reservation}?page=folio&id=${record.id_folio}`)}> { value } </Link>)
     },
     {
-      title: 'Phone',
-      dataIndex: 'booker',
-      key: 'booker_phone',
-      render: (booker) => (
-        <span> { booker ? booker.phone : null } </span>  
-      )
-    },
-    {
-      title: 'Email',
-      dataIndex: 'booker',
-      key: 'booker_email',
-      render: (booker) => (
-        <span> { booker ? booker.email : null } </span>  
-      )
-    },
-    {
-      title: 'Created at',
+      title: 'Date',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (created_at) => (
-        <span> { DateTimeFormat(created_at) } </span>
+      render: (date) => DateFormat(date),
+    },
+    {
+      title: 'Guest',
+      dataIndex: 'guest',
+      key: 'guest',
+      render: (guest) => (
+        <span> { guest ? guest.name : null } </span>  
       )
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-    }
+    },
+    {
+      title: 'Revenue',
+      dataIndex: 'revenue',
+      key: 'revenue',
+      render: (revenue) => Currency(revenue),
+    },
   ];
-  
+
   componentDidMount() {
-    this.fetchReservationList();
+    this.fetchFolioHistory();
   }
 
   handleFilter = () => {
-    this.fetchReservationList();
+    this.fetchFolioHistory();
   }
 
   handleFrom = (from) => {
@@ -98,13 +87,14 @@ class ReservationList extends React.PureComponent {
     this.setState({ to });
   }
 
-  fetchReservationList = () => {
+  fetchFolioHistory = () => {
     const { from, to } = this.state;
     this.setState({ isLoadingData: true });
-    axios.get(`/report/reservation_list?from=${from.format('YYYY-MM-DD')}&to=${to.format('YYYY-MM-DD')}`)
+    axios.get(`/report/folio_history?from=${from.format('YYYY-MM-DD')}&to=${to.format('YYYY-MM-DD')}`)
     .then(res => {
       this.setState({
-        data: res.data,
+        data: res.data.folios,
+        total: res.data.total,
         isLoadingData: false,
       });
     })
@@ -113,21 +103,21 @@ class ReservationList extends React.PureComponent {
         notification.error({
           message: 'Error',
           description: err.response.data.message,
-        });
+        })
       }
       this.setState({ isLoadingData: false });
     });
   }
-
+  
   render() {
-    const { data, isLoadingData, from, to } = this.state;
+    const { isLoadingData, data, from, to, total } = this.state;
 
     return (
       <div>
         <Row className="noprint">
           <Col>
             <Card>
-              <Typography.Title level={4}> Reservation List </Typography.Title>
+              <Typography.Title level={4}> Folio History </Typography.Title>
               <Form layout="inline">
                 <Form.Item
                   label="From"
@@ -158,25 +148,31 @@ class ReservationList extends React.PureComponent {
           </Col>
         </Row>
         <br />
-        <Row>
-          <Col>
-            <Card>
-              <div id="printarea">
-                <h1 className="printonly"> Reservation List { from.format('DD-MM-YYYY') } - { to.format('DD-MM-YYYY') }</h1>
-                <Table
-                  loading={isLoadingData}
-                  columns={this.columns}
-                  dataSource={data}
-                  size="small"
-                  pagination={false}
-                />
-              </div>
-            </Card>
-          </Col>
-        </Row>
+          <Row>
+            <Col>
+              <Card>
+                <div id="printarea">
+                  <h1 className="printonly"> Folio History { from.format('DD-MM-YYYY') } - { to.format('DD-MM-YYYY') }</h1>
+                  <Table
+                    columns={this.columns}
+                    loading={isLoadingData}
+                    dataSource={data}
+                    size="small"
+                    pagination={false}
+                    rowKey="folio_number"
+                  />
+                  <Card>
+                    <div style={{ textAlign: 'right', fontSize: '1.5em', paddingRight: 50 }}>
+                      <b> Total : { Currency(total) } </b>
+                    </div>
+                  </Card>
+                </div>
+              </Card>
+            </Col>
+          </Row>
       </div>
     );
   }
 }
 
-export default ReservationList;
+export default FolioHistory;

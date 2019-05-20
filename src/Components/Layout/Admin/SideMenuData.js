@@ -17,27 +17,20 @@ export default [
     label: 'Frontdesk',
     id: 'frontdesk',
     icon: 'form',
+    permission: 'view-frontdesk',
     child: [
       {
         label: 'Reservation',
         id: 'reservation',
         path: AdminUrl('/reservation'),
+        permission: 'view-reservation',
       },
       {
         label: 'In House',
         id: 'inhouse',
         path: AdminUrl('/reservation/inhouse'),
+        permission: 'view-guest-in-house',
       },
-      // {
-      //   label: 'Folio',
-      //   id: 'folio',
-      //   path: AdminUrl('/folio'),
-      // },
-      // {
-      //   label: 'Activity',
-      //   id: 'activity',
-      //   path: AdminUrl('/activity'),
-      // },
     ],
   },
   // {
@@ -57,11 +50,13 @@ export default [
     id: 'housekeeping',
     icon: 'rest',
     path: AdminUrl('/housekeeping'),
+    permission: 'view-housekeeping',
   },
   {
     label: 'Master Data',
     id: 'masterdata',
     icon: 'folder-open',
+    permission: 'view-master',
     child: [
       {
         label: 'Bed',
@@ -116,6 +111,7 @@ export default [
     label: 'Access Control',
     id: 'acl',
     icon: 'team',
+    permission: 'view-acl',
     child: [
       {
         label: 'User',
@@ -126,7 +122,6 @@ export default [
         label: 'Permission',
         id: 'permission',
         path: AdminUrl('/permission'),
-        permission: 'view-room-status'
       },
       {
         label: 'Role',

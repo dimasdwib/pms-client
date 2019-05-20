@@ -9,6 +9,7 @@ import RoomStatus from './Report/RoomStatus';
 import DailyRevenue from './Report/DailyRevenue';
 import ArrivalList from './Report/ArrivalList';
 import GuestInHouse from './Report/GuestInHouse';
+import FolioHistory from './Report/FolioHistory';
 
 class ReportPage extends React.Component {
 
@@ -26,6 +27,8 @@ class ReportPage extends React.Component {
         return <ArrivalList />;
       case 'guest_in_house' :
         return <GuestInHouse />;
+      case 'folio_history' :
+        return <FolioHistory />;
       default :
         return <Empty />;
     }
@@ -58,6 +61,10 @@ class ReportPage extends React.Component {
                 {
                   label: 'Room Status',
                   link: AdminUrl('/report/room_status')
+                },
+                {
+                  label: 'Folio History',
+                  link: AdminUrl('/report/folio_history')
                 },
                 // {
                 //   label: 'Daily Revenue',

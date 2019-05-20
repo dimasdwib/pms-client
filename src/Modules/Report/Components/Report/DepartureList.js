@@ -1,6 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Typography, Table, notification } from 'antd';
+import { Row, Col, Card, Typography, Table, notification, Button } from 'antd';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { AdminUrl } from '../../../../Helper/RouteHelper';
 import { DateFormat, DateTimeFormat } from '../../../../Helper/DateTime';
 
 class DepartureList extends React.PureComponent {
@@ -17,6 +19,7 @@ class DepartureList extends React.PureComponent {
       title: 'Number',
       dataIndex: 'number',
       key: 'number',
+      render: (value, record) => (<Link to={AdminUrl(`/reservation/${record.id_reservation}`)}> { value } </Link>)
     },
     {
       title: 'Guest',
@@ -80,10 +83,11 @@ class DepartureList extends React.PureComponent {
 
     return (
       <div>
-        <Row>
+        <Row className="noprint">
           <Col>
             <Card>
               <Typography.Title level={4}> Departure List </Typography.Title>
+              <Button type="primary" onClick={() => window.print()} icon="printer"> Print </Button>
             </Card>
           </Col>
         </Row>
@@ -91,13 +95,16 @@ class DepartureList extends React.PureComponent {
         <Row>
           <Col>
             <Card>
-              <Table
-                columns={this.columns}
-                loading={isLoadingData}
-                dataSource={data}
-                size="small"
-                pagination={{ position: 'none' }}
-              />
+              <div id="printarea">
+                <h1 className="printonly"> Departure List </h1>
+                <Table
+                  columns={this.columns}
+                  loading={isLoadingData}
+                  dataSource={data}
+                  size="small"
+                  pagination={false}
+                />
+              </div>
             </Card>
           </Col>
         </Row>

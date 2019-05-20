@@ -34,6 +34,11 @@ class GuestPage extends React.Component {
       key: 'email',
     },
     {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
       title: 'Address',
       dataIndex: 'address',
       key: 'address',

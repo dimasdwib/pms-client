@@ -6,6 +6,17 @@ import axios from 'axios';
 
 class GuestForm extends React.PureComponent {
 
+  formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
   columns = [{
     title: 'Name',
     dataIndex: 'name',
@@ -165,32 +176,27 @@ class GuestForm extends React.PureComponent {
           <Tabs.TabPane tab="Create new" key='create'>
             <Row>
               <Col span={12}>
-                <Row>
-                  <Col>
-                    <Form layout="inline">
-                      <TextField 
-                        label="Name"
-                        placeholder="Name"
-                        name="name"
-                        onChange={this.handleChange}
-                        value={name}
-                      />
-                      <Form.Item
-                        label="Title"
-                      >
-                        <Select
-                          placeholder="Title"
-                          value={title}
-                          onChange={this.handleTitle}
-                        >
-                          <Select.Option value="mr"> mr </Select.Option>
-                          <Select.Option value="mrs"> mrs </Select.Option>
-                          <Select.Option value="ms"> ms </Select.Option>
-                        </Select>
-                      </Form.Item>
-                    </Form>
-                  </Col>
-                </Row>
+                <TextField 
+                  label="Name"
+                  placeholder="Name"
+                  name="name"
+                  onChange={this.handleChange}
+                  value={name}
+                />
+                <Form.Item
+                  {...this.formItemLayout}
+                  label="Title"
+                >
+                  <Select
+                    placeholder="Title"
+                    value={title}
+                    onChange={this.handleTitle}
+                  >
+                    <Select.Option value="mr"> mr </Select.Option>
+                    <Select.Option value="mrs"> mrs </Select.Option>
+                    <Select.Option value="ms"> ms </Select.Option>
+                  </Select>
+                </Form.Item>
                 <TextField 
                   label="Phone"
                   placeholder="Phone"

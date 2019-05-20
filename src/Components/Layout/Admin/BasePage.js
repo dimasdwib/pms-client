@@ -11,7 +11,7 @@ class BasePage extends React.PureComponent {
   render() {
     return (
       <ProtectPage permission={this.props.permission}>
-        <Typography.Title level={3}> { this.props.pageTitle || 'Page Title' } </Typography.Title>
+        <Typography.Title level={3} className="noprint"> { this.props.pageTitle || 'Page Title' } </Typography.Title>
         {this.props.children}
       </ProtectPage>
     );

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Typography, Table, notification } from 'antd';
+import { Row, Col, Card, Typography, Table, notification, Button } from 'antd';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { AdminUrl } from '../../../../Helper/RouteHelper';
 import { DateFormat, DateTimeFormat } from '../../../../Helper/DateTime';
 
 class GuestInHouse extends React.PureComponent {
@@ -17,6 +19,7 @@ class GuestInHouse extends React.PureComponent {
       title: 'Number',
       dataIndex: 'number',
       key: 'number',
+      render: (value, record) => (<Link to={AdminUrl(`/reservation/${record.id_reservation}?page=room&id=${record.id_reservation_room}`)}> { value } </Link>)
     },
     {
       title: 'Guest',
@@ -45,7 +48,7 @@ class GuestInHouse extends React.PureComponent {
     },
     {
       title: 'Departure',
-      dataIndex: 'adeparture',
+      dataIndex: 'departure',
       key: 'departure',
       render: (departure) => (DateFormat(departure)),
     }
@@ -80,10 +83,11 @@ class GuestInHouse extends React.PureComponent {
 
     return (
       <div>
-        <Row>
+        <Row className="noprint">
           <Col>
             <Card>
               <Typography.Title level={4}> Guest In House </Typography.Title>
+              <Button type="primary" onClick={() => window.print()} icon="printer"> Print </Button>
             </Card>
           </Col>
         </Row>
@@ -91,13 +95,16 @@ class GuestInHouse extends React.PureComponent {
         <Row>
           <Col>
             <Card>
-              <Table
-                columns={this.columns}
-                loading={isLoadingData}
-                dataSource={data}
-                size="small"
-                pagination={{ position: 'none' }}
-              />
+              <div id="printarea">
+                <h1 className="printonly"> Guest in house </h1>
+                <Table
+                  columns={this.columns}
+                  loading={isLoadingData}
+                  dataSource={data}
+                  size="small"
+                  pagination={false}
+                />
+              </div>
             </Card>
           </Col>
         </Row>

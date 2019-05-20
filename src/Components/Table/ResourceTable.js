@@ -186,7 +186,7 @@ class ResourceTable extends React.Component {
               <Form.Item>
                 <Button type="primary" icon="search" htmlType="submit" />
               </Form.Item>
-            </Form>
+            </Form>   
           </Col>
         </Row>
         <Row>

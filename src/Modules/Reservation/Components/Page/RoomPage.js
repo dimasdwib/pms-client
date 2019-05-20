@@ -5,6 +5,7 @@ import axios from 'axios';
 import { IconArrival, IconDeparture } from '../../../../Components/Icon/Reservation';
 import { RoomChargeStatus } from '../../../../Components/Label/Label';
 import { Currency } from '../../../../Helper/Currency';
+import { DateFormat } from '../../../../Helper/DateTime';
 
 const { confirm } = Modal;
 const { Title } = Typography;
@@ -163,7 +164,7 @@ class RoomPage extends React.Component {
       <Spin spinning={statusFetch === 'update'}>
         <Row>
           <Col>
-            <Title level={3}> {room.number} <Divider type="vertical" /> <IconArrival /> { room_guest.date_arrival } <Icon type="swap-right" /> <IconDeparture /> { room_guest.date_departure } </Title>
+            <Title level={3}> {room.number} <Divider type="vertical" /> <IconArrival /> { DateFormat(room_guest.date_arrival) } <Icon type="swap-right" /> <IconDeparture /> { DateFormat(room_guest.date_departure) } </Title>
           </Col>
         </Row>
         <Row>
@@ -183,7 +184,7 @@ class RoomPage extends React.Component {
               renderItem={ch => (
                 <List.Item> 
                   <div>
-                    {ch.date} - {Currency(ch.amount_nett)} &nbsp;&nbsp; <RoomChargeStatus status={ch.status} />
+                    { DateFormat(ch.date)} - {Currency(ch.amount_nett)} &nbsp;&nbsp; <RoomChargeStatus status={ch.status} />
                     { ch.status === 'pending' && room_guest.date_checkin !== null ?
                       <Button style={{ float: 'right'}} shape="round" size="small" type="primary" onClick={() => this.confirmRoomCharge(ch, this.submitRoomCharge)}> Post </Button>
                       : null 

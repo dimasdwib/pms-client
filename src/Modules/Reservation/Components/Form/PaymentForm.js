@@ -55,6 +55,7 @@ class PaymentForm extends React.PureComponent {
     return (
       <div>
         <Form>
+          {/*
           <Form.Item
             label="Type"
             {...this.formItemLayout}
@@ -66,6 +67,7 @@ class PaymentForm extends React.PureComponent {
               { this.payments.map(p => (<Select.Option key={p.id_payment} value={p.id_payment}> {p.name} </Select.Option>)) }
             </Select>
           </Form.Item>
+          */}
           <TextField
             name="amount"
             label="Amount"

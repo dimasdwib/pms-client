@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Typography, Table, notification } from 'antd';
+import { Row, Col, Card, Typography, Table, notification, Button } from 'antd';
 import axios from 'axios';
 
 class RoomStatus extends React.PureComponent {
@@ -69,10 +69,11 @@ class RoomStatus extends React.PureComponent {
 
     return (
       <div>
-        <Row>
+        <Row className="noprint">
           <Col>
             <Card>
               <Typography.Title level={4}> Room Status </Typography.Title>
+              <Button type="primary" onClick={() => window.print()} icon="printer"> Print </Button>
             </Card>
           </Col>
         </Row>
@@ -80,13 +81,16 @@ class RoomStatus extends React.PureComponent {
         <Row>
           <Col>
             <Card>
-              <Table
-                loading={isLoadingData}
-                columns={this.columns}
-                dataSource={data}
-                size="small"
-                pagination={{ position: 'none' }}
-              />
+              <div id="printarea">
+                <h1 className="printonly"> Room Status </h1>
+                <Table
+                  loading={isLoadingData}
+                  columns={this.columns}
+                  dataSource={data}
+                  size="small"
+                  pagination={false}
+                />
+              </div>
             </Card>
           </Col>
         </Row>

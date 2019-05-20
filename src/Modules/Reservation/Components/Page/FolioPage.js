@@ -101,8 +101,7 @@ class RoomPage extends React.Component {
     const guest = data.guest || {};
     return (
       <div>
-        
-        <Row>
+        <Row className="noprint">
           <Col span={12}>
           { data.status === 'open' ?
             <div>
@@ -116,48 +115,49 @@ class RoomPage extends React.Component {
           }
           </Col>
           <Col span={12}>
-            {/* <Button style={{ float: 'right' }} shape="round" type="primary"> Print </Button> */}
+            <Button style={{ float: 'right' }} onClick={() => window.print()} shape="round" type="primary" icon="printer"> Print </Button>
           </Col>
         </Row>
         <Divider />
-        <Card>
-          <Row>
-            <Col>
-              <Title level={3}> Folio { data.number } </Title>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={16}>
-              <small>Guest</small>
-              <Title level={4}> {guest.name} .{guest.title} </Title>
-              <span> { guest.phone } </span> | 
-              <span> { guest.email } </span> <br />
-              <span> { guest.address } </span> <br />
-            </Col>
-            <Col span={8}>
-              <small> Balance </small>
-              <Title level={4}> { Currency(data.balance) } </Title>
-            </Col>
-          </Row>
-          <Divider />
-          <Row>
-            <Col>
-              <Table
-                rowKey="id_transaction"
-                size="small"
-                dataSource={data.transactions || []}
-                columns={this.columns}
-                pagination={false}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
+        <div id="printarea">
+          <Card>
+            <Row>
+              <Col>
+                <Title level={3}> Folio { data.number } </Title>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={16}>
+                <small>Guest</small>
+                <Title level={4}> {guest.name} .{guest.title} </Title>
+                <span> { guest.phone } </span> | 
+                <span> { guest.email } </span> <br />
+                <span> { guest.address } </span> <br />
+              </Col>
+              <Col span={8}>
+                <small> Balance </small>
+                <Title level={4}> { Currency(data.balance) } </Title>
+              </Col>
+            </Row>
+            <Divider />
+            <Row>
+              <Col>
+                <Table
+                  rowKey="id_transaction"
+                  size="small"
+                  dataSource={data.transactions || []}
+                  columns={this.columns}
+                  pagination={false}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
 
-            </Col>
-          </Row>
-        </Card>
-
+              </Col>
+            </Row>
+          </Card>
+        </div>
         <Modal
           title="Add Payment"
           visible={this.state.openModalAddPayment}

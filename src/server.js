@@ -60,6 +60,38 @@ server
             return `<link href="${style.file}" rel="stylesheet"/>`;
           })
           .join('\n')}
+        <style type="text/css">
+          .printonly {
+            display: none; 
+          }
+          @media print {
+              aside, header, header *, footer, .ant-list, .noprint { 
+                display: none !important;
+              }
+              #printarea {
+                padding: 0;
+                margin: 0;
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                z-index: 99999;
+              }
+              .printonly {
+                display: block;
+              }
+              #root #printarea {
+                visibility: visible !important;
+                background-color: #fff;
+              }
+              #printarea h1 {
+                font-weight: 600;
+                font-size: 1.4em; 
+              }
+          }
+        </style>
     </head>
     <body>
         <div id="root">${markup}</div>

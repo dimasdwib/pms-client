@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Select, Form, Button, Divider } from 'antd';
 import { IconArrival, IconDeparture } from '../../../../Components/Icon/Reservation';
 import RoomCard from '../../../../Components/Card/RoomCard';
+import { Currency } from '../../../../Helper/Currency';
 
 class RoomForm extends React.PureComponent {
 
@@ -165,7 +166,7 @@ class RoomForm extends React.PureComponent {
                 { 
                   roomAvailable.rates.filter((rate) => rate.id_room_type === idRoomType)
                   .map(rate => (
-                    <Select.Option key={rate.id_rate} value={rate.id_rate}> { rate.name } - { rate.amount_nett } </Select.Option>
+                    <Select.Option key={rate.id_rate} value={rate.id_rate}> { rate.name } - { Currency(rate.amount_nett) } </Select.Option>
                   ))
                 }
               </Select>

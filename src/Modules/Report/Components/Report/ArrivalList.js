@@ -1,6 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Typography, Table, notification } from 'antd';
+import { Row, Col, Card, Typography, Table, notification, Button } from 'antd';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { AdminUrl } from '../../../../Helper/RouteHelper';
 import { DateFormat } from '../../../../Helper/DateTime';
 
 class ArrivalList extends React.PureComponent {
@@ -17,6 +19,7 @@ class ArrivalList extends React.PureComponent {
       title: 'Number',
       dataIndex: 'number',
       key: 'number',
+      render: (value, record) => (<Link to={AdminUrl(`/reservation/${record.id_reservation}`)}> { value } </Link>)
     },
     {
       title: 'Booker',
@@ -47,7 +50,7 @@ class ArrivalList extends React.PureComponent {
     },
     {
       title: 'Departure',
-      dataIndex: 'adeparture',
+      dataIndex: 'departure',
       key: 'departure',
       render: (departure) => (DateFormat(departure)),
     }
@@ -82,10 +85,11 @@ class ArrivalList extends React.PureComponent {
 
     return (
       <div>
-        <Row>
+        <Row className="noprint">
           <Col>
             <Card>
               <Typography.Title level={4}> Arrival List </Typography.Title>
+              <Button type="primary" onClick={() => window.print()} icon="printer"> Print </Button>
             </Card>
           </Col>
         </Row>
@@ -93,13 +97,16 @@ class ArrivalList extends React.PureComponent {
         <Row>
           <Col>
             <Card>
-              <Table
-                columns={this.columns}
-                loading={isLoadingData}
-                dataSource={data}
-                size="small"
-                pagination={{ position: 'none' }}
-              />
+              <div id="printarea">
+                <h1 className="printonly"> Arrival List </h1>
+                <Table
+                  columns={this.columns}
+                  loading={isLoadingData}
+                  dataSource={data}
+                  size="small"
+                  pagination={false}
+                />
+              </div>
             </Card>
           </Col>
         </Row>

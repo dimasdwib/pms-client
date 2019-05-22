@@ -55,7 +55,32 @@ class GuestForm extends React.PureComponent {
       id_state: '',
       id_city: '',
       guestData: [],
+      selectedRowKeys: [],
       selectedGuest: {},
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.data && this.props.isOpen) {
+      this.setState({
+        search: this.props.data.search,
+        selectedGuest: this.props.data.selectedGuest,
+        selectedRowKeys: [this.props.data.selectedGuest.id_guest]
+      });
+      this.fetchGuest(this.props.data.search);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.data) {
+      if (prevProps.isOpen !== this.props.isOpen) {
+        this.setState({
+          search: this.props.data.search,
+          selectedGuest: this.props.data.selectedGuest,
+          selectedRowKeys: [this.props.data.selectedGuest.id_guest]
+        });
+        this.fetchGuest(this.props.data.search);
+      }
     }
   }
 
@@ -82,8 +107,11 @@ class GuestForm extends React.PureComponent {
     this.setState({ search: e.target.value });
   }
 
-  fetchGuest = () => {
-    const { search } = this.state;
+  fetchGuest = (searchValue) => {
+    let { search } = this.state;
+    if (searchValue) {
+      search = searchValue;
+    }
     this.setState({ isLoadingSearch: true });
     axios.get(`/guest/all?search=${search}`)
     .then(res => {
@@ -159,10 +187,13 @@ class GuestForm extends React.PureComponent {
                   loading={isLoadingSearch}
                   rowSelection={{ 
                     type: "radio",
-                    onSelect: (guest) => this.setState({ selectedGuest: guest })
+                    selectedRowKeys: this.state.selectedRowKeys,
+                    onSelect: (guest) => this.setState({ selectedGuest: guest }),
+                    onChange: (selectedRowKeys) => this.setState({ selectedRowKeys }),
                   }}
                   pagination={false}
                   size="small"
+                  rowKey="id_guest"
                   locale={{
                     emptyText: <Empty> <Button type="primary" onClick={() => this.setState({ activeKey: 'create' })}>Create New</Button> </Empty>
                   }}

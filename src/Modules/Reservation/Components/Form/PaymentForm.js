@@ -73,6 +73,7 @@ class PaymentForm extends React.PureComponent {
             label="Amount"
             value={amount}
             type="number"
+            size="large"
             onChange={(e) => this.setState({ amount: e.target.value })}
           />
         </Form>

@@ -162,7 +162,7 @@ class ReservationList extends React.PureComponent {
           <Col>
             <Card>
               <div id="printarea">
-                <h1 className="printonly"> Reservation List { from.format('DD-MM-YYYY') } - { to.format('DD-MM-YYYY') }</h1>
+                <h1 className="printonly"> Reservation List <small> { from.format('DD-MM-YYYY') } - { to.format('DD-MM-YYYY') } </small></h1>
                 <Table
                   loading={isLoadingData}
                   columns={this.columns}

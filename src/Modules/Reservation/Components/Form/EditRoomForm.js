@@ -1,22 +1,32 @@
 import React from 'react';
-import { Row, Col, Select, Form, Button, Divider } from 'antd';
+import { Row, Col, Select, Form, Button, Divider, Spin } from 'antd';
+import qs from 'qs';
+import axios from 'axios';
 import { IconArrival, IconDeparture } from '../../../../Components/Icon/Reservation';
 import RoomCard from '../../../../Components/Card/RoomCard';
 import { Currency } from '../../../../Helper/Currency';
 
-class RoomForm extends React.PureComponent {
+class EditRoomForm extends React.PureComponent {
 
   constructor(props) {
     super(props);
     this.state = {
       feature: null,
+      roomAvailable: {
+        room_types: [],
+        beds: [],
+        rooms: [],
+        rates: [],
+        isLoadingRoom: null,
+      },
     }
+    this.fetchRoomAvailable();
   }
 
-  handleAddRoom = () => {
+  handleSelectRoom = () => {
     
-    const { idRoom, idRate, idBed, idRoomType } = this.state;
-    const { roomAvailable, dateArrival, dateDeparture } = this.props;
+    const { idRoom, idRate, idBed, idRoomType, roomAvailable } = this.state;
+    const { dateArrival, dateDeparture, data } = this.props;
 
     const room_type = roomAvailable.room_types.find((d) => d.id_room_type === idRoomType);
     const bed = roomAvailable.beds.find((r) => r.id_bed === idBed);
@@ -27,12 +37,10 @@ class RoomForm extends React.PureComponent {
       return;
     }
 
-    const data = {
+    const roomData = {
       ...room,
       room_type,
-      guests: [
-        { id_guest: 1, name: 'Jhon Doe' }
-      ],
+      guests: data.guests,
       bed,
       rate: {
         ...rate,
@@ -41,9 +49,41 @@ class RoomForm extends React.PureComponent {
       date_departure: dateDeparture,
     };
 
-    if (this.props.onAddRoom) {
-      this.props.onAddRoom(data);
+    if (data.id_reservation_room) {
+      roomData.id_reservation_room = data.id_reservation_room; 
     }
+
+    if (this.props.onSelectRoom) {
+      this.props.onSelectRoom(roomData);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.isOpen) {
+      if (this.props.isOpen !== prevProps.isOpen) {
+        this.fetchRoomAvailable();
+      }
+    }
+  }
+
+  fetchRoomAvailable = () => {
+    const { dateArrival, dateDeparture } = this.props;
+    const query = {
+      date_arrival: dateArrival,
+      date_departure: dateDeparture,
+    };
+    this.setState({ isLoadingRoom: true });
+    axios.get(`/room/available?${qs.stringify(query)}`)
+    .then(res => {
+      this.setState({
+        roomAvailable: res.data,
+        isLoadingRoom: false,
+      });
+    })
+    .catch(err => {
+      this.setState({ isLoadingRoom: false });
+      console.log(err);
+    });
   }
 
   handleRoomType = (value) => {
@@ -82,16 +122,16 @@ class RoomForm extends React.PureComponent {
   }
 
   render() {
-    const { roomAvailable } = this.props;
+    const { roomAvailable } = this.state;
 
     if (roomAvailable === null) {
       return null;
     }
 
-    const { idRoomType, idRate, idRoom, idBed } = this.state;
+    const { idRoomType, idRate, idRoom, idBed, isLoadingRoom } = this.state;
 
     return (
-      <div>
+      <Spin spinning={isLoadingRoom}>
         <Row>
           <Col>
             <IconArrival /> {this.props.dateArrival} &nbsp; <IconDeparture /> {this.props.dateDeparture}
@@ -195,12 +235,12 @@ class RoomForm extends React.PureComponent {
           </Col>
         </Row>
         <Divider />
-        <Button type="primary" onClick={this.handleAddRoom}>
-          Add Room
+        <Button type="primary" onClick={this.handleSelectRoom}>
+          Select Room
         </Button>
-      </div>
+      </Spin>
     );
   };
 }
 
-export default RoomForm;
+export default EditRoomForm;

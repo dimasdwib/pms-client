@@ -152,7 +152,7 @@ class FolioHistory extends React.PureComponent {
             <Col>
               <Card>
                 <div id="printarea">
-                  <h1 className="printonly"> Folio History { from.format('DD-MM-YYYY') } - { to.format('DD-MM-YYYY') }</h1>
+                  <h1 className="printonly"> Folio History <small> { from.format('DD-MM-YYYY') } - { to.format('DD-MM-YYYY') } </small></h1>
                   <Table
                     columns={this.columns}
                     loading={isLoadingData}

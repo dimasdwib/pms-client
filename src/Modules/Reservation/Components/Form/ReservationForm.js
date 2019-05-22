@@ -269,6 +269,7 @@ class ReservationForm extends React.Component {
             <Row>
               { booker.id_guest ?
                 <Card>
+                  <Button onClick={() => this.setState({ openModalBooker: true })} shape="circle" style={{ float: 'right' }}><Icon type="edit" /></Button>
                   {booker.name} .{booker.title} <br />
                   <Icon type="phone" /> {booker.phone} <br/>
                   <Icon type="mail" /> {booker.email}
@@ -277,21 +278,21 @@ class ReservationForm extends React.Component {
                 <Col>
                   <Button type="dashed" block size="large" onClick={() => this.setState({ openModalBooker: true })}>
                     {/* Booker */}
-                    Guest
+                    Booker
                   </Button>
-                  <Modal
-                    width='80%'
-                    title="Guest"
-                    centered
-                    visible={this.state.openModalBooker}
-                    maskClosable={false}
-                    onCancel={() => this.setState({ openModalBooker: false })}
-                    footer={null}
-                  >
-                    <GuestForm onAddGuest={this.handleAddBooker} />
-                  </Modal>
                 </Col>
               }
+              <Modal
+                width='80%'
+                title="Booker"
+                centered
+                visible={this.state.openModalBooker}
+                maskClosable={false}
+                onCancel={() => this.setState({ openModalBooker: false })}
+                footer={null}
+              >
+                <GuestForm isOpen={this.state.openModalBooker} onAddGuest={this.handleAddBooker} data={booker.id_guest ? { selectedGuest: booker, search: booker.name } : undefined} />
+              </Modal>
             </Row>
 
             <Divider />
@@ -305,9 +306,11 @@ class ReservationForm extends React.Component {
                   renderItem={(room) => { 
                     const menu = (
                       <Menu>
+                        {/*
                         <Menu.Item>
                           <a><Icon type="edit" /> Edit</a>
                         </Menu.Item>
+                        */}
                         <Menu.Item>
                           <a onClick={() => this.handleRemoveRoom(room.id_room)}><Icon type="delete" /> Remove</a>
                         </Menu.Item>
@@ -333,11 +336,11 @@ class ReservationForm extends React.Component {
             <Row>
               <Col>
                 { rooms.length > 0 ? 
-                <Button type="dashed" size="small" block onClick={() => this.setState({ openModalAddRoom: true })}>
+                <Button type="dashed" size="small" block disabled={!booker.name} onClick={() => this.setState({ openModalAddRoom: true })}>
                   Add More Room 
                 </Button>
                 :
-                <Button type="dashed" block size="large" onClick={() => this.setState({ openModalAddRoom: true })}>
+                <Button type="dashed" block size="large" disabled={!booker.name} onClick={() => this.setState({ openModalAddRoom: true })}>
                   Add Room 
                 </Button>
                 }
@@ -382,10 +385,11 @@ class ReservationForm extends React.Component {
                     return (
                       <List.Item key={payment.id_payment} actions={[ <Dropdown overlay={menu}><Button icon="more" shape="circle"></Button></Dropdown> ]}>
                         <List.Item.Meta
-                          title={`${payment.name}`}
+                          // title={`${payment.name}`}
+                          title="Deposit"
                         />
                         <div> 
-                          {payment.amount}
+                          {Currency(payment.amount)}
                         </div>
                       </List.Item>
                     )
@@ -433,7 +437,16 @@ class ReservationForm extends React.Component {
             </Row>
             <Row>
               <Col>
-                <Button loading={this.state.statusSubmit === 'loading'} type="primary" block size="large" icon="file-done" shape="round" onClick={this.handleSubmitReservation}>
+                <Button
+                  loading={this.state.statusSubmit === 'loading'} 
+                  type="primary"
+                  block
+                  size="large"
+                  icon="file-done"
+                  shape="round"
+                  onClick={this.handleSubmitReservation}
+                  disabled={!booker.name || rooms.length === 0}
+                >
                   Create Reservation
                 </Button>
               </Col>

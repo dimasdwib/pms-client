@@ -5,10 +5,9 @@ stages:
 
 before_script:
   - apt-get update
-  - rm -rf node_modules
   # yarn
   - yarn
-  - CI=false yarn build
+  - CI=false RAZZLE_ENDPOINT=https://server-pms.dwdev.site/api yarn build
 
   # ssh
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
@@ -18,9 +17,14 @@ before_script:
 
 deploy_production:
    stage: production
+   only:
+     - master
    script:
      - ssh-add <(echo "$AWS_SSH_KEY")
-     - ssh centos@3.0.122.222 "rm -rf /usr/share/nginx/html/projects/db_pms/client/*"
-     - scp -r build/* centos@3.0.122.222:/usr/share/nginx/html/projects/db_pms/client/
-     - scp package.json centos@3.0.122.222:/usr/share/nginx/html/projects/db_pms/client/
-     - ssh centos@3.0.122.222 "cd /usr/share/nginx/html/projects/db_pms/client && yarn"
+     - ssh centos@3.0.122.222 "rm -rf /usr/share/nginx/html/microservice/client-pms/build/*"
+     - ssh centos@3.0.122.222 "rm /usr/share/nginx/html/microservice/client-pms/package.json"
+     - scp -r build/* centos@3.0.122.222:/usr/share/nginx/html/microservice/client-pms/build/
+     - scp package.json centos@3.0.122.222:/usr/share/nginx/html/microservice/client-pms/
+     - ssh centos@3.0.122.222 "cd /usr/share/nginx/html/microservice/client-pms/ && yarn install --production"
+     - ssh centos@3.0.122.222 "cd /usr/share/nginx/html/microservice/client-pms/ && pm2 delete client-pms"
+     - ssh centos@3.0.122.222 "cd /usr/share/nginx/html/microservice/client-pms/ && pm2 start build/server.js --name client-pms"

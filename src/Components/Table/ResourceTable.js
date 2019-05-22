@@ -119,8 +119,8 @@ class ResourceTable extends React.Component {
       this.setState({
         loading: false,
         dataSource: res.data.data,
-        current: res.data.current_page,
-        total: res.data.total,
+        current: res.data.current_page || res.data.meta.current_page,
+        total: res.data.total || res.data.meta.total,
       });
     })
     .catch(err => {
@@ -163,7 +163,7 @@ class ResourceTable extends React.Component {
       if (Number(total) === 1) {
         return `Total ${total} item`;
       }
-      return null; 
+      return null;
     }
 
     return null;
@@ -186,7 +186,7 @@ class ResourceTable extends React.Component {
               <Form.Item>
                 <Button type="primary" icon="search" htmlType="submit" />
               </Form.Item>
-            </Form>
+            </Form>   
           </Col>
         </Row>
         <Row>
@@ -221,13 +221,14 @@ class ResourceTable extends React.Component {
             </Form>
           </Col>
         </Row>
+        <br />
         <Row>
           <Col span={24}>
             <Table
               loading={loading}
               dataSource={dataSource}
               columns={this.props.columns}
-              pagination={{position: 'none'}}
+              pagination={false}
               rowKey={this.props.rowKey || 'id'}
             />
           </Col>

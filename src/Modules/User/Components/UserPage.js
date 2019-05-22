@@ -98,14 +98,13 @@ class UserPage extends React.Component {
 
   render() {
     return (
-      <BasePage permission={'read-users'}>
+      <BasePage permission={'read-users'} pageTitle="Users">
         <Row>
           <Col span={24}>
             <ResourceTable
               key={this.state.tableKey}
               resourceUrl={'/users'}
               columns={this.columns}
-              router={this.props.router}
               tableAction={this.tableAction}
             />
           </Col>

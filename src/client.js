@@ -5,12 +5,13 @@ import { BrowserRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import axios from 'axios';
 import App from './App';
+import config from './config';
 import configureStore from './configureStore';
 
 const root = document.getElementById('root');
 const store = configureStore(window.__PRELOADED_STATE__);
 
-axios.defaults.baseURL = 'http://localhost/laravel-api/api/';
+axios.defaults.baseURL = config.api.endpoint;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const token = localStorage.getItem('aToken');

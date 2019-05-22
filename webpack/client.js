@@ -15,6 +15,15 @@ const extractCss = new MiniCssExtractPlugin({
   chunkFilename: devMode ? 'static/css/[id].css' : 'static/css/[id].[hash].css',
 });
 
+const miniExtractPlugin = {
+  test: /\.less$/,
+  use: [
+    MiniCssExtractPlugin.loader,
+    "css-loader",
+    "less-loader",
+  ]
+};
+
 module.exports = (config, webpack) => ({
   ...config,
   module: {
@@ -29,14 +38,15 @@ module.exports = (config, webpack) => ({
           plugins: [['import', { libraryName: 'antd', style: "css" }]],
         },
       },
-      {
-        test: /\.less$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader",
-          "less-loader",
-        ]
-      },
+      !devMode ? miniExtractPlugin : {}, 
+      // {
+      //   test: /\.less$/,
+      //   use: [
+      //     MiniCssExtractPlugin.loader,
+      //     "css-loader",
+      //     "less-loader",
+      //   ]
+      // },
       // {
       //   test: /\.less$/,
       //   // use the ExtractTextPlugin instance

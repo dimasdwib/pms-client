@@ -38,6 +38,7 @@ class UserForm extends React.Component {
       searchPermission: '',
       searchRole: '',
       autoExpandParent: true,
+      isLoadingPage: false,
     }
   }
 
@@ -397,7 +398,7 @@ class UserForm extends React.Component {
       pagePermission = 'update-users';
     }
     return (
-      <BasePage permission={pagePermission}>
+      <BasePage permission={pagePermission} pageTitle="User" >
         <Spin spinning={isLoadingPage}>
           <Form>
             <Row gutter={16}>
@@ -407,6 +408,7 @@ class UserForm extends React.Component {
                   <Form.Item
                     {...this.formItemLayout}
                     label="Picture"
+                    style={{ display: 'none' }}
                   >
                     <Upload
                       name="avatar"

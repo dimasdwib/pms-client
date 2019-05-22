@@ -268,7 +268,7 @@ class PermissionPage extends React.Component {
     const { search, selectedData, groupData, statusTree, roleData, userData, mappedTree } = this.state;
 
     return (
-      <BasePage>
+      <BasePage pageTitle="Permissions">
         <Row gutter={16}>
           <Col span={8}>
             <Button onClick={this.createPermission} icon="safety" shape="round" size="small" type="primary"> Create Permission </Button>

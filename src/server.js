@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Capture } from 'react-loadable';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
+import expressStaticGzip from "express-static-gzip";
 import { getBundles } from 'react-loadable/webpack';
 import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
@@ -15,12 +16,24 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 const server = express();
 server
   .disable('x-powered-by')
-  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
+  .use('/', expressStaticGzip(process.env.RAZZLE_PUBLIC_DIR, {
+      enableBrotli: true,
+      customCompressions: [{
+        encodingName: 'gzip',
+        fileExtension: 'gzip'
+      }],
+      orderPreference: ['br', 'gz', 'gzip'],
+      setHeaders: (res) => {
+        res.setHeader("Cache-Control", "public, max-age=31536000");
+      }
+    })
+  )
+  // .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .get('/*', (req, res) => {
     const context = {};
     const modules = [];
-    const preloadedState = { 
-            Runtime: { initial: 'Test Server Reducer' } 
+    const preloadedState = {
+            Runtime: { initial: 'Test Server Reducer' }
           };
     const store = configureStore(preloadedState);
     const markup = renderToString(
@@ -32,7 +45,7 @@ server
         </StaticRouter>
       </Capture>
     );
-    
+
     const finalState = store.getState();
 
     if (context.url) {
@@ -41,57 +54,25 @@ server
       const bundles = getBundles(stats, modules);
       const chunks = bundles.filter(bundle => bundle.file.endsWith('.js'));
       const styles = bundles.filter(bundle => bundle.file.endsWith('.css'));
-      
+
       res.status(200).send(
         `<!doctype html>
     <html lang="">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta charset="utf-8" />
-        <title>Property Management System</title>
+        <title>Welcome to Razzle</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         ${
           assets.client.css
-            ? `<link rel="stylesheet" href="${assets.client.css}">`
+            ? `<link rel="stylesheet" type="text/css" href="${assets.client.css}">`
             : ''
         }
         ${styles
           .map(style => {
-            return `<link href="${style.file}" rel="stylesheet"/>`;
+            return `<link href="${style.file}" type="text/css" rel="stylesheet"/>`;
           })
           .join('\n')}
-        <style type="text/css">
-          .printonly {
-            display: none; 
-          }
-          @media print {
-              aside, header, header *, footer, .ant-list, .noprint { 
-                display: none !important;
-              }
-              #printarea {
-                padding: 0;
-                margin: 0;
-                position: fixed !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-                z-index: 99999;
-              }
-              .printonly {
-                display: block;
-              }
-              #root #printarea {
-                visibility: visible !important;
-                background-color: #fff;
-              }
-              #printarea h1 {
-                font-weight: 600;
-                font-size: 1.4em; 
-              }
-          }
-        </style>
     </head>
     <body>
         <div id="root">${markup}</div>

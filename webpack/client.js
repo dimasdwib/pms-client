@@ -10,19 +10,36 @@ const devMode = process.env.NODE_ENV !== 'production';
 //   disable: devMode, // disable this during development
 // })
 
+const BrotliPlugin = require('brotli-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+
 const extractCss = new MiniCssExtractPlugin({
   filename: devMode ? 'static/css/[name].css' : 'static/css/[name].[hash].css',
   chunkFilename: devMode ? 'static/css/[id].css' : 'static/css/[id].[hash].css',
 });
 
-const miniExtractPlugin = {
-  test: /\.less$/,
-  use: [
-    MiniCssExtractPlugin.loader,
-    "css-loader",
-    "less-loader",
-  ]
-};
+const compression = devMode ? [] : [
+  new CompressionPlugin({
+    filename: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: /\.(js|css|html|svg)$/,
+    threshold: 10240,
+    minRatio: 0.7
+  }),
+  new CompressionPlugin({
+    filename: '[path].gzip[query]',
+    algorithm: 'gzip',
+    test: /\.(js|css|html|svg)$/,
+    threshold: 10240,
+    minRatio: 0.7
+  }),
+  new BrotliPlugin({
+    asset: '[path].br[query]',
+    test: /\.(js|css|html|svg)$/,
+    threshold: 10240,
+    minRatio: 0.7
+  }),
+];
 
 module.exports = (config, webpack) => ({
   ...config,
@@ -38,15 +55,14 @@ module.exports = (config, webpack) => ({
           plugins: [['import', { libraryName: 'antd', style: "css" }]],
         },
       },
-      !devMode ? miniExtractPlugin : {}, 
-      // {
-      //   test: /\.less$/,
-      //   use: [
-      //     MiniCssExtractPlugin.loader,
-      //     "css-loader",
-      //     "less-loader",
-      //   ]
-      // },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "less-loader",
+        ]
+      },
       // {
       //   test: /\.less$/,
       //   // use the ExtractTextPlugin instance
@@ -75,5 +91,6 @@ module.exports = (config, webpack) => ({
     }),
     // extractLess, // <- Add the ExtractTextPlugin instance here
     extractCss,
+    ...compression,
   ],
 })
